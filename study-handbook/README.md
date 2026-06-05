@@ -71,6 +71,29 @@ npm run dev
 npm run build
 ```
 
+## 公网部署
+
+项目已配置 GitHub Pages 自动部署工作流：`.github/workflows/deploy.yml`。
+
+推送到 `main` 后，GitHub Actions 会自动：
+
+1. 进入 `study-handbook` 目录。
+2. 执行 `npm ci`。
+3. 执行 `npm run build`。
+4. 把 `dist/` 发布到 GitHub Pages。
+
+预计公网地址：
+
+```text
+https://eplayed.github.io/study-handlebook/
+```
+
+如果第一次访问没有页面，需要到 GitHub 仓库设置里打开：
+
+```text
+Settings -> Pages -> Build and deployment -> Source -> GitHub Actions
+```
+
 ## 教材来源策略
 
 - 语文：按统编版小学语文三年级下册常用目录整理，需与学校实际用书逐课校对。

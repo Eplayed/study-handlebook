@@ -87,12 +87,7 @@ const units = [
     }
   ];
 
-const wrongQuestions = [
-              { id: "cw-1", lessonId: "cn-1", examPointId: "cn-1-write", title: "古诗默写漏偏旁", question: "“鸳鸯、蒌蒿、融”写错。", mistake: "只会背诗，不会看字形。", fix: "每个字拆偏旁写三遍，再放回诗句默写。", source: "错题归类示例" },
-              { id: "cw-2", lessonId: "cn-3", examPointId: "cn-3-imagine", title: "分不清实写和想象", question: "把“我仿佛也变成了一朵荷花”当成真实发生。", mistake: "没有抓住“仿佛”。", fix: "看到“仿佛、好像”先判断是不是想象。", source: "高频阅读题型" },
-              { id: "cw-3", lessonId: "cn-11", examPointId: "cn-11-feature", title: "赵州桥特点概括不全", question: "只写赵州桥美观，漏掉雄伟、坚固。", mistake: "没有按段落中心句提取。", fix: "每段找中心句，再把特点合并。", source: "高频阅读题型" },
-              { id: "cw-4", lessonId: "cn-25", examPointId: "cn-25-table", title: "故事顺序错乱", question: "复述《慢性子裁缝和急性子顾客》时把几天的要求说乱。", mistake: "没有用表格记录时间。", fix: "按第一天、第二天、第三天、又过了一天列出要求变化。", source: "高频复述题型" }
-            ];
+const wrongQuestions = [];
 
 export const chineseSubject = {
   id: "chinese",

@@ -2,9 +2,9 @@
   <section id="wrong-links" class="panel wrong-panel">
     <div class="detail-header">
       <div>
-        <p class="eyebrow">错题关联</p>
-        <h2>错题放最后，但能跳回课文</h2>
-        <p>每条错题都关联到某一课和某个高频考点。点“回到知识点”会展开对应单元。</p>
+        <p class="eyebrow">真实错题</p>
+        <h2>{{ subject.label }}错题关联</h2>
+        <p>只放已经整理过的真实错题。每条错题关联到某一课和某个高频考点，点击后会展开对应单元。</p>
       </div>
       <span class="tag important">{{ wrongQuestions.length }} 条</span>
     </div>
@@ -24,12 +24,13 @@
       </article>
     </div>
 
-    <p v-else class="empty">这个学科还没有错题。后续把图片放入错题资料文件夹，再在数据里补关联即可。</p>
+    <p v-else class="empty">这个学科还没有真实错题资料。后续拿到错题后，再补“题目、错因、订正方法、关联课文和考点”。</p>
   </section>
 </template>
 
 <script setup>
 defineProps({
+  subject: { type: Object, required: true },
   wrongQuestions: { type: Array, required: true },
   lessonIndex: { type: Object, required: true }
 });

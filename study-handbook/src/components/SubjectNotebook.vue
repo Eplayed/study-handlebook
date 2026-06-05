@@ -7,7 +7,7 @@
       <div class="meta-row">
         <span class="tag important">{{ subject.units.length }} 个单元</span>
         <span class="tag important">{{ lessonCount }} 课/课次</span>
-        <span class="tag">{{ subject.wrongQuestions.length }} 条错题关联</span>
+        <span class="tag">{{ subject.wrongQuestions.length }} 条真实错题</span>
       </div>
     </section>
 
@@ -15,6 +15,7 @@
       <UnitAccordion
         v-for="unit in subject.units"
         :key="unit.id"
+        :subject-id="subject.id"
         :unit="unit"
         :open="openUnitIds.includes(unit.id)"
         :active-lesson-id="activeLessonId"
@@ -24,6 +25,7 @@
     </section>
 
     <WrongQuestionPanel
+      :subject="subject"
       :wrong-questions="subject.wrongQuestions"
       :lesson-index="lessonIndex"
       @focus="$emit('focus-wrong', $event)"

@@ -2,7 +2,7 @@ export function exam(id, title, detail) {
   return { id, title, detail };
 }
 
-export function lesson(id, order, title, center, knowledge, examPoints, wrongNotes = []) {
+export function lesson(id, order, title, center, knowledge, examPoints, options = {}) {
   return {
     id,
     order,
@@ -10,6 +10,6 @@ export function lesson(id, order, title, center, knowledge, examPoints, wrongNot
     center,
     knowledge,
     examPoints,
-    wrongNotes
+    ...(Array.isArray(options) ? { wrongNotes: options } : options)
   };
 }
