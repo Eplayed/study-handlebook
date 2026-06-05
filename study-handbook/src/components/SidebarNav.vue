@@ -14,7 +14,7 @@
       </select>
     </section>
 
-    <section class="panel compact">
+    <section v-if="false" class="panel compact">
       <label for="searchInput">搜索</label>
       <input
         id="searchInput"
@@ -25,7 +25,7 @@
       >
     </section>
 
-    <section class="panel compact">
+    <section v-if="false" class="panel compact">
       <label for="modeSelect">学习模式</label>
       <select id="modeSelect" :value="mode" @change="$emit('update:mode', $event.target.value)">
         <option value="review">复习卡</option>

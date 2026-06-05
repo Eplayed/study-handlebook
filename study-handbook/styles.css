@@ -383,6 +383,137 @@ textarea, input[type="text"], input[type="number"] {
   padding: 10px 12px;
 }
 
+.knowledge-workbench {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.knowledge-list {
+  position: sticky;
+  top: 10px;
+}
+
+.knowledge-button {
+  width: 100%;
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  cursor: pointer;
+}
+
+.knowledge-button span,
+.knowledge-button small {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.knowledge-button strong {
+  font-size: 17px;
+}
+
+.knowledge-button.active {
+  border-color: var(--accent);
+  box-shadow: inset 4px 0 0 var(--accent);
+}
+
+.knowledge-button.mastered {
+  background: #eff9f1;
+}
+
+.knowledge-button.due {
+  background: #fff0ef;
+  border-color: #e0a39d;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+}
+
+.learning-section {
+  border-top: 1px dashed var(--line);
+  padding-top: 14px;
+  margin-top: 14px;
+}
+
+.explain-text {
+  background: #f8fbff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.step-list {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 12px 12px 34px;
+}
+
+.example-grid,
+.wrong-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.example-box,
+.wrong-box,
+.practice-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 12px;
+}
+
+.wrong-box {
+  background: #fff5f3;
+}
+
+.practice-list {
+  display: grid;
+  gap: 10px;
+}
+
+.practice-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+}
+
+.answer-line {
+  grid-column: 1 / -1;
+  margin: 0;
+  background: #f2fbf4;
+  border-left: 5px solid #55a36a;
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.wrong-form {
+  display: grid;
+  gap: 10px;
+  max-width: 760px;
+}
+
+.saved-wrongs {
+  margin-top: 18px;
+}
+
 .due {
   color: #8f2e28;
   font-weight: 900;
@@ -437,8 +568,15 @@ textarea, input[type="text"], input[type="number"] {
   .section-nav {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .card-grid, .checklist, .tool-grid, .start-grid {
+  .card-grid, .checklist, .tool-grid, .start-grid, .knowledge-workbench, .example-grid, .wrong-grid {
     grid-template-columns: 1fr;
+  }
+  .knowledge-list {
+    position: static;
+  }
+  .detail-header,
+  .practice-item {
+    display: block;
   }
   h1 { font-size: 28px; }
   h2 { font-size: 23px; }

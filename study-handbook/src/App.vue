@@ -1,5 +1,5 @@
 <template>
-  <AppHeader @print="printPage" @reset-checks="resetChecks" />
+  <AppHeader @print="printPage" @reset-checks="resetProgress" />
 
   <main class="layout">
     <SidebarNav
@@ -13,56 +13,62 @@
     />
 
     <section class="content">
-      <OverviewPanel :subject="subject" :updated-at="content.updatedAt" />
+      <section class="panel hero-panel">
+        <p class="eyebrow">复习工作台</p>
+        <h2>{{ subject.title }}</h2>
+        <p>{{ subject.summary }}</p>
+        <div class="meta-row">
+          <span class="tag important">{{ progressText }}</span>
+          <span class="tag important">{{ dueWrongCount ? `${dueWrongCount} 道错题到期` : "今天先学知识点" }}</span>
+          <span class="tag">更新：{{ content.updatedAt }}</span>
+        </div>
+      </section>
 
-      <StartPanel
-        :due-wrong-count="dueWrongEntries.length"
-        :next-card="nextCard"
-        :first-practice="subject.practice[0] || null"
-        @set-mode="mode = $event"
+      <section id="start" class="panel start-panel">
+        <h2>今天怎么复习</h2>
+        <div class="start-grid">
+          <article class="start-step">
+            <span class="step-number">1</span>
+            <h3>选一个知识点</h3>
+            <p>推荐先学：{{ activePoint?.title || "暂无知识点" }}</p>
+          </article>
+          <article class="start-step">
+            <span class="step-number">2</span>
+            <h3>看错题和讲解</h3>
+            <p>先看真实错题错在哪里，再看订正方法。</p>
+          </article>
+          <article class="start-step">
+            <span class="step-number">3</span>
+            <h3>做同类题</h3>
+            <p>做完能说出步骤，才标记“我掌握了”。</p>
+          </article>
+        </div>
+      </section>
+
+      <KnowledgeWorkbench
+        :knowledge-points="knowledgePoints"
+        :active-id="activeKnowledgeId"
+        :saved-wrongs="savedWrongs"
+        :mastered="mastered"
+        @select="activeKnowledgeId = $event"
+        @toggle-mastered="toggleMastered"
       />
 
-      <LearningPath :cards="subject.cards" />
-
-      <section id="mode" class="panel">
-        <ReviewMode v-if="mode === 'review'" :subject="subject" />
-        <WrongBookMode v-else-if="mode === 'wrongbook'" :subject="subject" :storage-key="subjectStorageKey('wrongbook')" @changed="storageTick++" />
-        <QuizMode v-else-if="mode === 'quiz'" :practice="subject.practice" />
-        <SpacedMode v-else :subject="subject" :storage-key="subjectStorageKey('spaced')" />
-      </section>
-
-      <section id="plan" class="panel">
-        <h2>两周复习安排</h2>
-        <SimpleTable :headers="['时间', '怎么复习']" :rows="subject.plan" />
-      </section>
+      <WrongQuestionManager
+        :knowledge-points="knowledgePoints"
+        :active-id="activeKnowledgeId"
+        :items="savedWrongs"
+        @add="addWrongQuestion"
+        @remove="removeWrongQuestion"
+      />
 
       <section id="sources" class="panel">
         <h2>资料来源</h2>
         <ul>
           <li v-for="source in subject.sources" :key="source">{{ source }}</li>
         </ul>
-        <p class="empty">说明：公开网络上能直接核验的杨浦区三年级完整历年真卷不齐全。本页面把本地校内错题、上海同教材常见卷面题型和教材重点分开处理，不把非杨浦卷冒充为杨浦真卷。</p>
+        <p class="empty">说明：本页优先使用本地校内错题、上海同教材常见卷面题型和教材重点。官方空中课堂和教材仓库作为来源索引，不把大文件或视频放进项目。</p>
       </section>
-
-      <ReviewCardsSection
-        :all-cards="subject.cards"
-        :filtered-cards="filteredCards"
-        :theme="subject.theme"
-        :query="query"
-      />
-
-      <section id="practice" class="panel">
-        <h2>同类再练</h2>
-        <SimpleTable :headers="['题目', '答案', '检查点']" :rows="subject.practice" />
-      </section>
-
-      <section id="unit-map" class="panel">
-        <h2>单元清单</h2>
-        <SimpleTable :headers="['单元', '要会什么', '最容易错什么']" :rows="subject.unitMap" />
-      </section>
-
-      <ChecklistPanel :items="subject.checklist" :is-checked="isChecked" @set-checked="setChecked" />
-      <MaintenancePanel />
     </section>
   </main>
 </template>
@@ -70,86 +76,106 @@
 <script setup>
 import { computed, ref, watch } from "vue";
 import AppHeader from "./components/AppHeader.vue";
-import ChecklistPanel from "./components/ChecklistPanel.vue";
-import LearningPath from "./components/LearningPath.vue";
-import MaintenancePanel from "./components/MaintenancePanel.vue";
-import OverviewPanel from "./components/OverviewPanel.vue";
-import ReviewCardsSection from "./components/ReviewCardsSection.vue";
+import KnowledgeWorkbench from "./components/KnowledgeWorkbench.vue";
 import SidebarNav from "./components/SidebarNav.vue";
-import StartPanel from "./components/StartPanel.vue";
-import SimpleTable from "./components/common/SimpleTable.vue";
-import QuizMode from "./components/modes/QuizMode.vue";
-import ReviewMode from "./components/modes/ReviewMode.vue";
-import SpacedMode from "./components/modes/SpacedMode.vue";
-import WrongBookMode from "./components/modes/WrongBookMode.vue";
-import { readJson, todayIso } from "./utils/storage";
+import WrongQuestionManager from "./components/WrongQuestionManager.vue";
+import { addDays, readJson, todayIso, writeJson } from "./utils/storage";
 
 const content = window.HANDBOOK_CONTENT;
 const gradeId = ref(content.grades[0].id);
 const subjectId = ref(content.grades[0].defaultSubject);
 const query = ref("");
 const mode = ref("review");
-const storageTick = ref(0);
 
 const navItems = [
-  ["#start", "今天开始"],
-  ["#path", "学习路线"],
-  ["#mode", "学习模式"],
-  ["#plan", "两周安排"],
-  ["#sources", "资料来源"],
-  ["#cards", "复习卡"],
-  ["#practice", "同类再练"],
-  ["#unit-map", "单元清单"],
-  ["#checklist", "每日打卡"],
-  ["#maintenance", "持续维护"]
+  ["#start", "今天怎么复习"],
+  ["#workbench", "知识点复习"],
+  ["#wrong-manager", "新增错题"],
+  ["#sources", "资料来源"]
 ].map(([href, label]) => ({ href, label }));
 
 const grade = computed(() => content.grades.find((item) => item.id === gradeId.value) || content.grades[0]);
 const subject = computed(() => grade.value.subjects.find((item) => item.id === subjectId.value) || grade.value.subjects[0]);
+const knowledgePoints = computed(() => {
+  if (subject.value.knowledgePoints?.length) return subject.value.knowledgePoints;
+  return (subject.value.cards || []).map((card, index) => ({
+    id: `legacy-${index}`,
+    title: card.title,
+    stage: index < 2 ? "先补基础" : "综合复习",
+    priority: card.level,
+    source: card.source,
+    childGoal: card.childText,
+    explain: card.childText,
+    steps: card.how || [],
+    workedExamples: [{ question: card.example, answer: card.answer, explanation: card.mistake }],
+    wrongQuestions: [{ question: card.example, mistake: card.mistake, fix: card.answer }],
+    practice: (subject.value.practice || []).map((row) => ({ question: row[0], answer: row[1], check: row[2] })),
+    mastery: [card.mistake, "能独立做同类题。"]
+  }));
+});
+const activeKnowledgeId = ref("");
+
+watch([gradeId, subjectId], () => {
+  if (!grade.value.subjects.some((item) => item.id === subjectId.value)) {
+    subjectId.value = grade.value.defaultSubject || grade.value.subjects[0].id;
+  }
+  activeKnowledgeId.value = knowledgePoints.value[0]?.id || "";
+}, { immediate: true });
 
 watch(gradeId, () => {
   subjectId.value = grade.value.defaultSubject || grade.value.subjects[0].id;
 });
 
-const filteredCards = computed(() => {
-  if (!query.value) return subject.value.cards;
-  const lower = query.value.toLowerCase();
-  return subject.value.cards.filter((card) => [
-    card.title,
-    card.level,
-    card.source,
-    card.childText,
-    card.example,
-    card.answer,
-    card.mistake,
-    ...(card.how || [])
-  ].join(" ").toLowerCase().includes(lower));
+const activePoint = computed(() => knowledgePoints.value.find((item) => item.id === activeKnowledgeId.value) || knowledgePoints.value[0]);
+const wrongStorageKey = computed(() => `handbook:${gradeId.value}:${subjectId.value}:knowledge-wrongs`);
+const masteryStorageKey = computed(() => `handbook:${gradeId.value}:${subjectId.value}:knowledge-mastered`);
+const savedWrongs = ref([]);
+const mastered = ref({});
+
+watch(wrongStorageKey, (key) => {
+  savedWrongs.value = readJson(key, []);
+}, { immediate: true });
+
+watch(masteryStorageKey, (key) => {
+  mastered.value = readJson(key, {});
+}, { immediate: true });
+
+const dueWrongCount = computed(() => savedWrongs.value.filter((item) => item.dueAt <= todayIso()).length);
+const progressText = computed(() => {
+  const total = knowledgePoints.value.length;
+  if (!total) return "暂无知识点";
+  const done = knowledgePoints.value.filter((item) => mastered.value[item.id]).length;
+  return `已掌握 ${done}/${total} 个知识点`;
 });
 
-const dueWrongEntries = computed(() => {
-  storageTick.value;
-  return readJson(subjectStorageKey("wrongbook"), []).filter((entry) => entry.dueAt <= todayIso());
-});
-const nextCard = computed(() => subject.value.cards[0] || null);
-
-function subjectStorageKey(name) {
-  return `handbook:${gradeId.value}:${subjectId.value}:${name}`;
+function addWrongQuestion(payload) {
+  const next = {
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    knowledgeId: payload.knowledgeId,
+    question: payload.question,
+    answer: payload.answer,
+    reason: payload.reason,
+    createdAt: todayIso(),
+    dueAt: addDays(Number(payload.dueDays || 2))
+  };
+  savedWrongs.value = [next, ...savedWrongs.value];
+  writeJson(wrongStorageKey.value, savedWrongs.value);
+  activeKnowledgeId.value = payload.knowledgeId;
 }
 
-function checklistKey(item) {
-  return `handbook:${gradeId.value}:${subjectId.value}:${item}`;
+function removeWrongQuestion(id) {
+  savedWrongs.value = savedWrongs.value.filter((item) => item.id !== id);
+  writeJson(wrongStorageKey.value, savedWrongs.value);
 }
 
-function isChecked(item) {
-  return localStorage.getItem(checklistKey(item)) === "1";
+function toggleMastered(id) {
+  mastered.value = { ...mastered.value, [id]: !mastered.value[id] };
+  writeJson(masteryStorageKey.value, mastered.value);
 }
 
-function setChecked(item, checked) {
-  localStorage.setItem(checklistKey(item), checked ? "1" : "0");
-}
-
-function resetChecks() {
-  subject.value.checklist.forEach((item) => localStorage.removeItem(checklistKey(item)));
+function resetProgress() {
+  mastered.value = {};
+  writeJson(masteryStorageKey.value, mastered.value);
 }
 
 function printPage() {
