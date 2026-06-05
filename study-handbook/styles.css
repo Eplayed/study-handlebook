@@ -240,6 +240,18 @@ li { margin: 4px 0; }
   padding: 14px;
 }
 
+.sync-box {
+  margin-top: 12px;
+  border: 1px solid #bfd4e4;
+  border-radius: 8px;
+  background: #f2f8fb;
+  padding: 10px 12px;
+}
+
+.sync-box p {
+  margin: 2px 0;
+}
+
 .notebook {
   display: grid;
   gap: 14px;
@@ -354,6 +366,12 @@ li { margin: 4px 0; }
   color: #24526d;
   padding: 4px 10px;
   font-weight: 900;
+}
+
+.word-pill.chinese-pill {
+  border-color: #e6c98b;
+  background: #fff7e5;
+  color: #744a13;
 }
 
 .exam-list {

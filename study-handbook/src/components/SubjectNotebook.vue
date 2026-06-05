@@ -4,6 +4,10 @@
       <p class="eyebrow">学习记事本</p>
       <h2>{{ subject.title }}</h2>
       <p>{{ subject.textbook }}</p>
+      <div v-if="subject.sync" class="sync-box">
+        <p><strong>教材目录：</strong>{{ subject.sync.textbookCatalog }}</p>
+        <p><strong>学校进度：</strong>{{ subject.sync.schoolProgress }}</p>
+      </div>
       <div class="meta-row">
         <span class="tag important">{{ subject.units.length }} 个单元</span>
         <span class="tag important">{{ lessonCount }} 课/课次</span>

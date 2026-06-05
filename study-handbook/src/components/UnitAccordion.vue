@@ -18,8 +18,17 @@
       >
         <div class="lesson-header">
           <span class="tag source">{{ lesson.order }}</span>
+          <span v-if="lesson.readingType" class="tag">{{ lesson.readingType }}</span>
+          <span v-if="lesson.page" class="tag">教材第 {{ lesson.page }} 页</span>
           <h3>{{ lesson.title }}</h3>
         </div>
+
+        <section v-if="lesson.textbookItems?.length" class="lesson-block">
+          <h4>课内篇目</h4>
+          <div class="word-list">
+            <span v-for="item in lesson.textbookItems" :key="item" class="word-pill chinese-pill">{{ item }}</span>
+          </div>
+        </section>
 
         <section class="lesson-block">
           <h4>{{ goalLabel }}</h4>

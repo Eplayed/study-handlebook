@@ -18,6 +18,14 @@
 - 建议保存方式：只抽取当前需要的目录、单元、课文/章节标题和复习映射。
 - 不建议：把整套 PDF 教材提交到 Git。全量教材体积很大，也有版权和仓库体积问题。
 
+### 国家中小学智慧教育平台电子教材
+
+- 语文三年级下册页面：https://basic.smartedu.cn/tchMaterial/detail?contentType=assets_document&contentId=8e107655-5128-451f-84e5-d158725c537b&catalogType=tchMaterial&subCatalog=dzjc&page=7
+- 教材标题：义务教育教科书·语文三年级下册。
+- 本地保存：`/Users/zhangyajun/Documents/学习/语文/教材/三年级下册_国家中小学智慧教育平台`
+- 用途：核对目录、课文名称、页码、精读/略读标记。
+- 不建议：把教材图片或合成 PDF 提交到 GitHub。
+
 ## 项目内应该保存什么
 
 - 年级、学期、学科。
