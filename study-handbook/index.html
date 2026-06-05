@@ -4,61 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>小学期末复习手册</title>
-  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <header class="app-header">
-    <div>
-      <p class="eyebrow">可持续维护版</p>
-      <h1>小学期末复习手册</h1>
-      <p class="subtitle">把教材重点、卷面考点、真实错题和每日复习安排放在一个可以长期更新的网页里。</p>
-    </div>
-    <div class="header-actions">
-      <button id="printBtn" class="icon-button" type="button" title="打印或保存为 PDF">打印</button>
-      <button id="resetChecksBtn" class="icon-button secondary" type="button" title="清空本页打卡">清空打卡</button>
-    </div>
-  </header>
-
-  <main class="layout">
-    <aside class="sidebar" aria-label="复习导航">
-      <section class="panel compact">
-        <label for="gradeSelect">年级</label>
-        <select id="gradeSelect"></select>
-      </section>
-      <section class="panel compact">
-        <label for="subjectSelect">学科</label>
-        <select id="subjectSelect"></select>
-      </section>
-      <section class="panel compact">
-        <label for="searchInput">搜索</label>
-        <input id="searchInput" type="search" placeholder="例如：周长、古诗、robot">
-      </section>
-      <section class="panel compact">
-        <label for="modeSelect">学习模式</label>
-        <select id="modeSelect">
-          <option value="review">复习卡</option>
-          <option value="wrongbook">错题本</option>
-          <option value="quiz">每日小测</option>
-          <option value="spaced">间隔复习</option>
-        </select>
-      </section>
-      <nav id="sectionNav" class="section-nav"></nav>
-    </aside>
-
-    <section class="content">
-      <div id="overview" class="panel hero-panel"></div>
-      <div id="modePanel" class="panel"></div>
-      <div id="plan" class="panel"></div>
-      <div id="sourceSummary" class="panel"></div>
-      <div id="cards"></div>
-      <div id="practice" class="panel"></div>
-      <div id="unitMap" class="panel"></div>
-      <div id="checklist" class="panel"></div>
-      <div id="maintenance" class="panel"></div>
-    </section>
-  </main>
-
-  <script src="./content.js"></script>
-  <script src="./app.js"></script>
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
 </body>
 </html>

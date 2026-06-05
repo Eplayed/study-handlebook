@@ -1,5 +1,7 @@
 .DS_Store
 *.docx
 *.pdf
+node_modules/
+dist/
 期末复习手册_三年级学生版.html
 study-handbook/preview.png
