@@ -165,6 +165,68 @@ p { margin: 8px 0; }
   background: var(--paper);
 }
 
+.start-panel {
+  background: #f8fbff;
+}
+
+.start-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.start-step {
+  position: relative;
+  min-height: 190px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 16px;
+}
+
+.step-number {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.note-text {
+  color: var(--muted);
+}
+
+.path-list {
+  display: grid;
+  gap: 10px;
+}
+
+.path-item {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--soft);
+  padding: 12px;
+}
+
+.path-index {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  font-weight: 900;
+}
+
 .meta-row {
   display: flex;
   gap: 8px;
@@ -313,6 +375,14 @@ textarea, input[type="text"], input[type="number"] {
   margin-top: 10px;
 }
 
+.linked-card {
+  margin: 8px 0;
+  border: 1px solid #bfd8c7;
+  border-radius: 8px;
+  background: #f4fbf5;
+  padding: 10px 12px;
+}
+
 .due {
   color: #8f2e28;
   font-weight: 900;
@@ -367,7 +437,7 @@ textarea, input[type="text"], input[type="number"] {
   .section-nav {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .card-grid, .checklist, .tool-grid {
+  .card-grid, .checklist, .tool-grid, .start-grid {
     grid-template-columns: 1fr;
   }
   h1 { font-size: 28px; }

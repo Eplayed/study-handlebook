@@ -6,8 +6,12 @@
 
 - `index.html`：网页入口。
 - `styles.css`：页面样式。
-- `src/App.vue`：Vue 主组件，包含页面渲染、搜索、打卡、错题本、小测、间隔复习。
+- `src/App.vue`：Vue 页面编排层，只负责年级/学科/模式状态和页面组装。
 - `src/main.js`：Vue 挂载入口。
+- `src/components/`：页面组件。
+- `src/components/modes/`：复习卡、错题本、每日小测、间隔复习等学习模式。
+- `src/components/common/`：通用表格、复习卡等基础组件。
+- `src/utils/storage.js`：本地存储、日期、卡片 ID 等工具函数。
 - `content.js`：所有年级、学科、复习卡、错题和答案都放在这里。
 - `vite.config.js`：Vite + Vue 构建配置。
 - `package.json`：项目依赖和脚本。
