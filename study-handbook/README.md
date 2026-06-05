@@ -1,93 +1,82 @@
-# 小学期末复习手册
+# 学习记事本
 
-这是一个可持续维护的静态网页项目，用来整理三年级、四年级的期末复习要点、卷面考点和错题。
+这是一个可持续维护的 Vue 网页项目，用来整理小学三年级、四年级的学习资料。
+
+当前默认：
+
+- 年级：三年级
+- 学科：语文
+- 结构：年级 -> 学科 -> 单元 -> 课文/课次 -> 知识要点 -> 高频考试要点 -> 错题关联
 
 ## 文件说明
 
-- `index.html`：网页入口。
-- `styles.css`：页面样式。
-- `src/App.vue`：Vue 页面编排层，只负责年级/学科/模式状态和页面组装。
-- `src/main.js`：Vue 挂载入口。
-- `src/components/`：页面组件。
-- `src/components/modes/`：复习卡、错题本、每日小测、间隔复习等学习模式。
-- `src/components/common/`：通用表格、复习卡等基础组件。
-- `src/utils/storage.js`：本地存储、日期、卡片 ID 等工具函数。
-- `content.js`：所有年级、学科、复习卡、错题和答案都放在这里。
-- `vite.config.js`：Vite + Vue 构建配置。
-- `package.json`：项目依赖和脚本。
+- `src/data/content.js`：学习记事本总入口，组合年级和学科。
+- `src/data/grade3/chinese.js`：三年级语文单元、课文、知识点、高频考点和错题关联。
+- `src/data/grade3/math.js`：三年级数学单元、知识点、高频考点和错题关联。
+- `src/data/grade3/english.js`：三年级英语模块、Unit、知识点、高频考点和错题关联。
+- `src/App.vue`：页面编排层，负责年级/学科选择、单元展开和错题定位。
+- `src/components/SubjectNotebook.vue`：学科记事本主视图。
+- `src/components/UnitAccordion.vue`：单元折叠和课文详情。
+- `src/components/WrongQuestionPanel.vue`：错题关联列表，点击后跳回对应课文和考点。
+- `scripts/import-math-assets.mjs`：把本地数学练习卷、老师笔记图片导入网页资料库。
+- `styles.css`：全局样式。
 
-## 怎么维护
+## 怎么维护教材内容
 
-1. 打开 `content.js`。
-2. 找到对应年级，例如 `grade3` 或 `grade4`。
-3. 找到对应学科，例如 `math`、`chinese`、`english`。
-4. 在 `cards` 里新增复习卡。
+1. 打开 `src/data/grade3/` 下对应学科文件。
+2. 找到对应年级，例如 `grade3`。
+3. 找到对应学科，例如 `chinese`、`math`、`english`。
+4. 在 `units` 中按单元维护课程。
+5. 每课包含：
+   - `title`：课文名或课次名
+   - `center`：中心思想或本课目标
+   - `knowledge`：知识要点
+   - `examPoints`：高频考试要点，每个考点有独立 `id`
+6. 在 `wrongQuestions` 中新增错题，并填写：
+   - `lessonId`：关联到哪一课
+   - `examPointId`：关联到哪一个高频考点
+   - `question`：错题
+   - `mistake`：错因
+   - `fix`：订正方法
 
-复习卡建议按这个结构写：
+## 文件夹错题资料
 
-```js
-{
-  title: "考点名称",
-  level: "★★★ 经常考",
-  source: "来自校内错题卷",
-  childText: "给孩子看的解释。",
-  how: ["第一步", "第二步", "第三步"],
-  example: "例题",
-  answer: "答案",
-  mistake: "易错提醒"
-}
+新增错题图片、练习卷答案、老师笔记继续放在本地文件夹，不在网页里提交。
+
+当前数学资料目录：
+
+- `/Users/zhangyajun/Documents/学习/数学/练习卷`
+- `/Users/zhangyajun/Documents/学习/数学/老师笔记`
+
+导入图片资料：
+
+```bash
+cd /Users/zhangyajun/Documents/学习小助手/study-handbook
+npm run import:math
 ```
 
-## 推荐使用方式
+导入生成目录是 `public/generated/`，已加入 Git 忽略，不会把孩子试卷照片上传到 GitHub。
 
-- 本地开发：`npm install` 后运行 `npm run dev`。
-- 构建检查：运行 `npm run build`。
-- 打印：在网页里点“打印”，选择保存为 PDF。
-- 加四年级：直接在 `content.js` 的 `grade4` 里补充卡片。
+## 本地运行
 
-## 已有学习模式
+```bash
+cd /Users/zhangyajun/Documents/学习小助手/study-handbook
+npm install
+npm run dev
+```
 
-- 复习卡：按“给孩子的话、怎么做、例题、答案、易错提醒”学习。
-- 错题本：在浏览器本地保存错题、错因、下次复习日期。
-- 每日小测：用 `practice` 里的题目生成遮答案练习。
-- 间隔复习：会的卡片 2 天后再看，不会的明天再看。
+构建检查：
 
-错题本和间隔复习的数据保存在浏览器 `localStorage` 中，不会自动上传到 GitHub。
+```bash
+npm run build
+```
 
-## 当前学习模型
+## 教材来源策略
 
-当前版本以“知识点复习工作台”为主，不再以静态卡片墙为主。
+- 语文：按统编版小学语文三年级下册常用目录整理，需与学校实际用书逐课校对。
+- 数学：按上海小学三年级下册常见沪教版单元和本地校内练习卷错题整理。
+- 英语：按上海教育出版社牛津上海版三年级下册 3B 模块目录整理，需与学校实际用书逐课校对。
+- 官方同步课程入口：上海智慧教育平台·空中课堂 https://basic.sh.smartedu.cn/airclassroom/
+- 教材索引参考：SteveTDX/shanghai_textbooks https://github.com/SteveTDX/shanghai_textbooks
 
-每个知识点包含：
-
-- 孩子要达成的目标
-- 知识点解释
-- 做题步骤
-- 例题讲解
-- 真实错题复盘
-- 同类练习
-- 掌握标准
-
-新增错题必须关联知识点。复习错题时，会先带出对应知识点，再回到同类题练习。
-
-## 教材数据建议
-
-可以参考 `SteveTDX/shanghai_textbooks` 这类上海教材下载项目，但不要把整套教材 PDF 提交到本仓库。
-
-也可以参考上海智慧教育平台·空中课堂：https://basic.sh.smartedu.cn/airclassroom/ ，作为官方同步课程入口。
-
-推荐做法：
-
-1. 把教材仓库作为外部数据来源。
-2. 只下载当前需要的年级、学科、学期教材。
-3. 从教材中抽取目录、单元标题、课文/知识点映射。
-4. 在本项目中保存轻量结构化数据，例如 `content.js` 或后续的 `src/data/*.js`。
-5. PDF、PNG、OCR 原文等大文件放在本地资料目录或对象存储，不进 Git。
-
-原因：
-
-- 全量教材体积可能接近 100GB，不适合放进应用仓库。
-- 教材版权需要谨慎处理，项目内应只保留个人学习所需的轻量索引和复习卡。
-- 轻量数据更容易维护，也更适合三年级、四年级长期迭代。
-
-更详细的数据来源策略见：`docs/data-sources.md`。
+不要把整套教材 PDF 或孩子试卷照片提交到 GitHub。仓库里只放轻量结构化索引和网页代码。

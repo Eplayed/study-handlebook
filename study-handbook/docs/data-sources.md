@@ -8,7 +8,7 @@
 
 - 入口：https://basic.sh.smartedu.cn/airclassroom/
 - 用途：同步课程视频、课时学习入口、官方资源链接。
-- 建议保存方式：只保存入口链接、年级、学科、课时标题、对应复习卡关系。
+- 建议保存方式：只保存入口链接、年级、学科、课时标题、对应课文和考点关系。
 - 不建议：批量下载视频或把视频资源提交到 Git。
 
 ### SteveTDX/shanghai_textbooks
@@ -22,8 +22,8 @@
 
 - 年级、学期、学科。
 - 单元和课文/章节标题。
-- 考点卡。
-- 例题、答案、易错提醒。
+- 每课的知识要点、中心思想和高频考试要点。
+- 错题、错因、订正方法，以及它关联到哪一课、哪一个高频考点。
 - 本地错题来源说明。
 - 官方课程或教材的来源链接。
 
@@ -34,13 +34,14 @@
 - 未经整理的 OCR 全文。
 - 无来源的网上试卷合集。
 
-## 后续可迭代的数据结构
+## 当前数据结构
 
-可以把 `content.js` 拆成：
+当前已经拆成模块化数据：
 
-- `src/data/grades.js`
-- `src/data/subjects/math-grade3.js`
-- `src/data/resources/official-links.js`
-- `src/data/wrong-papers/math-grade3.js`
+- `src/data/content.js`：总入口，组合年级和学科。
+- `src/data/helpers.js`：创建课文和考点的小工具。
+- `src/data/grade3/chinese.js`：三年级语文。
+- `src/data/grade3/math.js`：三年级数学。
+- `src/data/grade3/english.js`：三年级英语。
 
-当前内容量还不大，先保留 `content.js`，等四年级内容变多后再拆分。
+四年级内容增加时，新增 `src/data/grade4/`，保持同样结构。

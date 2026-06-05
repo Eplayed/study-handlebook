@@ -1,0 +1,38 @@
+import { chineseSubject } from "./grade3/chinese.js";
+import { englishSubject } from "./grade3/english.js";
+import { mathSubject } from "./grade3/math.js";
+
+export const handbookContent = {
+  appName: "学习记事本",
+  updatedAt: "2026-06-05",
+  sourceNotes: [
+    "语文：按统编版小学语文三年级下册常用目录整理，需与学校实际用书逐课校对。",
+    "数学：按上海小学三年级下册常见沪教版单元和你提供的校内练习卷错题整理。",
+    "英语：按上海教育出版社牛津上海版三年级下册 3B 模块目录整理，需与学校实际用书逐课校对。",
+    "官方同步课程入口：上海智慧教育平台·空中课堂 https://basic.sh.smartedu.cn/airclassroom/",
+    "教材索引参考：SteveTDX/shanghai_textbooks https://github.com/SteveTDX/shanghai_textbooks"
+  ],
+  grades: [
+    {
+      id: "grade3",
+      label: "三年级",
+      defaultSubject: "chinese",
+      subjects: [chineseSubject, mathSubject, englishSubject]
+    },
+    {
+      id: "grade4",
+      label: "四年级",
+      defaultSubject: "chinese",
+      subjects: [
+        {
+          id: "chinese",
+          label: "语文",
+          title: "四年级语文学习记事本",
+          textbook: "待补充学校实际教材",
+          units: [],
+          wrongQuestions: []
+        }
+      ]
+    }
+  ]
+};

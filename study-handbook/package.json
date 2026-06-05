@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "import:math": "node scripts/import-math-assets.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },
