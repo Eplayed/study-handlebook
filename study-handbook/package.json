@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "import:math": "node scripts/import-math-assets.mjs",
+    "index:learning": "node scripts/index-learning-assets.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

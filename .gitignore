@@ -3,6 +3,7 @@
 *.pdf
 node_modules/
 dist/
+study-handbook/.local/
 study-handbook/public/generated/
 期末复习手册_三年级学生版.html
 study-handbook/preview.png

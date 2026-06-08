@@ -13,11 +13,28 @@
       <article v-for="item in wrongQuestions" :key="item.id" class="wrong-link-card">
         <div class="wrong-link-head">
           <span class="tag source">{{ item.source }}</span>
+          <span v-if="item.weakness" class="tag weak">薄弱点</span>
           <h3>{{ item.title }}</h3>
         </div>
+        <p v-if="item.weakness" class="weakness-text"><span class="field-title">需要补牢</span>{{ item.weakness }}</p>
         <p><span class="field-title">题目</span>{{ item.question }}</p>
         <p><span class="field-title">错在哪里</span>{{ item.mistake }}</p>
         <p><span class="field-title">订正方法</span>{{ item.fix }}</p>
+
+        <section v-if="item.reviewPlan?.length" class="review-plan">
+          <span class="field-title">怎么复习</span>
+          <ol>
+            <li v-for="step in item.reviewPlan" :key="step">{{ step }}</li>
+          </ol>
+        </section>
+
+        <section v-if="item.evidence?.length" class="evidence-list">
+          <span class="field-title">来源证据</span>
+          <div class="word-list">
+            <span v-for="source in item.evidence" :key="source" class="word-pill evidence-pill">{{ source }}</span>
+          </div>
+        </section>
+
         <button class="small-button primary" type="button" @click="$emit('focus', item)">
           回到知识点：{{ lessonIndex[item.lessonId]?.title || "未关联课程" }}
         </button>

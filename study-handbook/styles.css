@@ -220,6 +220,12 @@ select {
   color: #2f663b;
 }
 
+.tag.weak {
+  border-color: var(--wrong-line);
+  background: var(--wrong);
+  color: #8d3f2f;
+}
+
 .field-title {
   display: block;
   margin-bottom: 2px;
@@ -417,6 +423,37 @@ li { margin: 4px 0; }
 
 .wrong-link-head h3 {
   margin: 0;
+}
+
+.weakness-text {
+  border-left: 4px solid var(--wrong-line);
+  background: #fff4ef;
+  padding: 9px 12px;
+}
+
+.review-plan {
+  border: 1px solid #ead1bb;
+  border-radius: 8px;
+  background: #fffaf2;
+  padding: 10px 12px;
+  margin: 12px 0;
+}
+
+.review-plan ol {
+  margin: 4px 0 0;
+}
+
+.evidence-list {
+  margin: 10px 0 14px;
+}
+
+.evidence-pill {
+  max-width: 100%;
+  border-color: #d9c9a8;
+  background: #fbf4e6;
+  color: #76521e;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .detail-header {

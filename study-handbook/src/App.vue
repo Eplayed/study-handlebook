@@ -25,7 +25,7 @@
           <li v-for="source in content.sourceNotes" :key="source">{{ source }}</li>
         </ul>
         <p class="empty">
-          新增错题继续放在本地资料文件夹中。网页里的错题条目负责记录“这道题关联哪一课、哪一个高频考点”，点击后可以回到对应知识点。
+          新增作业、错题、老师笔记继续放在本地资料文件夹中。先运行 npm run index:learning 生成增量索引，再把新增错题整理到对应学科数据里；网页里的错题条目负责记录“这道题关联哪一课、哪一个高频考点”，点击后可以回到对应知识点。
         </p>
       </section>
     </section>

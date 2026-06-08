@@ -7,6 +7,7 @@
       <div v-if="subject.sync" class="sync-box">
         <p><strong>教材目录：</strong>{{ subject.sync.textbookCatalog }}</p>
         <p><strong>学校进度：</strong>{{ subject.sync.schoolProgress }}</p>
+        <p v-if="subject.sync.assetIndex"><strong>增量索引：</strong>{{ subject.sync.assetIndex }}</p>
       </div>
       <div class="meta-row">
         <span class="tag important">{{ subject.units.length }} 个单元</span>

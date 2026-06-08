@@ -53,3 +53,21 @@
 - `src/data/grade3/english.js`：三年级英语。
 
 四年级内容增加时，新增 `src/data/grade4/`，保持同样结构。
+
+## 本地资料增量索引
+
+本地原始资料放在 `/Users/zhangyajun/Documents/学习/`，包括教材 PDF、作业照片、答案和老师笔记。原始资料不提交到 GitHub。
+
+在 `study-handbook` 目录运行：
+
+```bash
+npm run index:learning
+```
+
+脚本会生成 `.local/learning-assets-index.json`。这个文件被 Git 忽略，只在本机使用。第一次运行时所有文件都会显示为 `new`；以后新增作业或老师笔记后再次运行，只需要查看 `new` 和 `changed` 文件，再整理对应错题和知识点关联。
+
+可用环境变量切换资料路径：
+
+```bash
+LEARNING_ROOT=/Users/zhangyajun/Documents/学习 npm run index:learning
+```
