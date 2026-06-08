@@ -35,6 +35,48 @@
           </div>
         </section>
 
+        <section v-if="item.evidenceImages?.length" class="evidence-image-list">
+          <span class="field-title">点击查看图片</span>
+          <div class="evidence-grid">
+            <a
+              v-for="image in item.evidenceImages"
+              :key="image.url"
+              class="evidence-image-card"
+              :href="image.url"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img :src="image.url" :alt="image.label">
+              <span>{{ image.label }}</span>
+            </a>
+          </div>
+        </section>
+
+        <section v-if="practiceSets[item.practiceSetId]" class="practice-box">
+          <div class="practice-head">
+            <div>
+              <span class="field-title">相似题练习</span>
+              <strong>{{ practiceSets[item.practiceSetId].title }}</strong>
+            </div>
+            <button class="small-button" type="button" @click="nextPractice(item)">
+              {{ activePractice[item.id] ? "换一题" : "练一道" }}
+            </button>
+          </div>
+
+          <article v-if="activePractice[item.id]" class="practice-card">
+            <p class="practice-question">{{ activePractice[item.id].question }}</p>
+            <button class="small-button primary" type="button" @click="toggleAnswer(item.id)">
+              {{ shownAnswers[item.id] ? "收起答案" : "看答案" }}
+            </button>
+            <div v-if="shownAnswers[item.id]" class="practice-answer">
+              <p><span class="field-title">答案</span>{{ activePractice[item.id].answer }}</p>
+              <ol>
+                <li v-for="step in activePractice[item.id].steps" :key="step">{{ step }}</li>
+              </ol>
+            </div>
+          </article>
+        </section>
+
         <button class="small-button primary" type="button" @click="$emit('focus', item)">
           回到知识点：{{ lessonIndex[item.lessonId]?.title || "未关联课程" }}
         </button>
@@ -46,11 +88,31 @@
 </template>
 
 <script setup>
-defineProps({
+import { reactive } from "vue";
+
+const props = defineProps({
   subject: { type: Object, required: true },
   wrongQuestions: { type: Array, required: true },
-  lessonIndex: { type: Object, required: true }
+  lessonIndex: { type: Object, required: true },
+  practiceSets: { type: Object, default: () => ({}) }
 });
 
 defineEmits(["focus"]);
+
+const activePractice = reactive({});
+const shownAnswers = reactive({});
+const practiceCursor = reactive({});
+
+function nextPractice(item) {
+  const practiceSet = props.practiceSets[item.practiceSetId];
+  if (!practiceSet?.items?.length) return;
+  const nextIndex = practiceCursor[item.id] ?? 0;
+  activePractice[item.id] = practiceSet.items[nextIndex % practiceSet.items.length];
+  practiceCursor[item.id] = nextIndex + 1;
+  shownAnswers[item.id] = false;
+}
+
+function toggleAnswer(itemId) {
+  shownAnswers[itemId] = !shownAnswers[itemId];
+}
 </script>

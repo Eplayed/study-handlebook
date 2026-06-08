@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>数学相似题练习</title>
+  <link rel="stylesheet" href="./math-practice.css">
+</head>
+<body>
+  <main class="practice-app">
+    <header>
+      <p class="eyebrow">不依赖 AI 的固定题库</p>
+      <h1>数学相似题练习</h1>
+      <p>选择一个薄弱点，独立练同类题。答案默认收起，做完再看。</p>
+    </header>
+
+    <section class="toolbar">
+      <label>
+        选择专项
+        <select id="practice-set"></select>
+      </label>
+      <button id="next-question" type="button">出一题</button>
+    </section>
+
+    <section id="question-card" class="question-card" hidden>
+      <p class="label">题目</p>
+      <h2 id="question-text"></h2>
+      <button id="toggle-answer" type="button">看答案</button>
+      <div id="answer-box" class="answer-box" hidden>
+        <p class="label">答案</p>
+        <p id="answer-text"></p>
+        <ol id="steps-list"></ol>
+      </div>
+    </section>
+  </main>
+
+  <script src="./math-practice.js" type="module"></script>
+</body>
+</html>

@@ -33,6 +33,7 @@
       :subject="subject"
       :wrong-questions="subject.wrongQuestions"
       :lesson-index="lessonIndex"
+      :practice-sets="subject.practiceSets || {}"
       @focus="$emit('focus-wrong', $event)"
     />
   </section>

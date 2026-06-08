@@ -1,4 +1,5 @@
 import { exam, lesson } from "../helpers.js";
+import { mathPracticeSets } from "./mathPractice.js";
 
 const units = [
   {
@@ -322,7 +323,21 @@ const units = [
   }
 ];
 
-const wrongQuestions = [
+const evidenceImages = {
+  "mw-1": [{ label: "查看错题图：3034÷82 商的位置", url: "evidence/math/mw-1-division-place.jpg" }],
+  "mw-2": [{ label: "查看错题图：除法填空和试商", url: "evidence/math/mw-2-trial-division.jpg" }],
+  "mw-3": [{ label: "查看错题图：平均每分钟走多少米", url: "evidence/math/mw-3-speed-average.jpg" }],
+  "mw-4": [{ label: "查看错题图：纸鹤两步应用题", url: "evidence/math/mw-4-paper-cranes.jpg" }],
+  "mw-5": [{ label: "查看错题图：面积单位和长度单位", url: "evidence/math/mw-5-area-units.jpg" }],
+  "mw-6": [{ label: "查看错题图：周长面积表格", url: "evidence/math/mw-6-shape-table.jpg" }],
+  "mw-7": [{ label: "查看老师笔记：周长相同面积最大", url: "evidence/math/mw-7-max-area-note.jpg" }],
+  "mw-8": [{ label: "查看错题图：组合图形面积", url: "evidence/math/mw-8-composite-area.jpg" }],
+  "mw-9": [{ label: "查看错题图：两位数乘三位数", url: "evidence/math/mw-9-large-multiply.jpg" }],
+  "mw-10": [{ label: "查看错题图：递等式运算顺序", url: "evidence/math/mw-10-order.jpg" }],
+  "mw-11": [{ label: "查看错题图：优惠方案比较", url: "evidence/math/mw-11-plan-compare.jpg" }]
+};
+
+const rawWrongQuestions = [
   {
     id: "mw-1",
     lessonId: "math-12",
@@ -468,6 +483,12 @@ const wrongQuestions = [
   }
 ];
 
+const wrongQuestions = rawWrongQuestions.map((item) => ({
+  ...item,
+  evidenceImages: evidenceImages[item.id] || [],
+  practiceSetId: item.examPointId
+}));
+
 export const mathSubject = {
   id: "math",
   label: "数学",
@@ -481,5 +502,6 @@ export const mathSubject = {
     assetIndex: "运行 npm run index:learning 生成本地增量索引，不上传教材和作业原件。"
   },
   units,
-  wrongQuestions
+  wrongQuestions,
+  practiceSets: mathPracticeSets
 };

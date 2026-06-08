@@ -71,3 +71,29 @@ npm run index:learning
 ```bash
 LEARNING_ROOT=/Users/zhangyajun/Documents/学习 npm run index:learning
 ```
+
+## 公开证据图
+
+GitHub Pages 不能读取本机 `/Users/zhangyajun/Documents/学习/` 下的图片。需要公网查看的错题证据图，先通过脚本从本地原图裁剪、遮挡姓名班级、删除 EXIF，再输出到 `public/evidence/math/`。
+
+```bash
+npm run evidence:math
+```
+
+裁剪配置在 `scripts/evidence-assets.config.mjs`。后续新增错题时，只需要补充一条配置，重新运行脚本，再把生成图片链接写入对应错题的 `evidenceImages`。
+
+## 相似题练习
+
+相似题题库在 `src/data/grade3/mathPractice.js`，按考点 ID 组织。主页面错题卡片会直接读取对应专项。
+
+独立练习页位于：
+
+```text
+/study-handlebook/practice/math.html
+```
+
+独立页读取 `public/practice/math-practice.json`。构建前会自动运行 `npm run export:practice` 导出静态 JSON；也可以手动运行：
+
+```bash
+npm run export:practice
+```

@@ -7,6 +7,9 @@
     "dev": "vite",
     "import:math": "node scripts/import-math-assets.mjs",
     "index:learning": "node scripts/index-learning-assets.mjs",
+    "evidence:math": "python3 scripts/generate-evidence-assets.py",
+    "export:practice": "node scripts/export-practice-data.mjs",
+    "prebuild": "npm run export:practice",
     "build": "vite build",
     "preview": "vite preview"
   },
