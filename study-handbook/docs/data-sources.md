@@ -84,7 +84,7 @@ npm run evidence:math
 
 ## 相似题练习
 
-相似题题库在 `src/data/grade3/mathPractice.js`，按考点 ID 组织。主页面错题卡片会直接读取对应专项。
+相似题配置在 `src/data/grade3/mathPractice.js`，按考点 ID 组织。每个专项可以指定 `generator`，由本地规则随机生成题目、答案和步骤；固定 `items` 作为兜底样题。主页面错题卡片会直接读取对应专项。
 
 独立练习页位于：
 
@@ -92,7 +92,7 @@ npm run evidence:math
 /study-handlebook/practice/math.html
 ```
 
-独立页读取 `public/practice/math-practice.json`。构建前会自动运行 `npm run export:practice` 导出静态 JSON；也可以手动运行：
+独立页读取 `public/practice/math-practice.json`，并在浏览器中用本地 JavaScript 生成相似题，不调用 AI。构建前会自动运行 `npm run export:practice` 导出静态 JSON；也可以手动运行：
 
 ```bash
 npm run export:practice

@@ -1,16 +1,3 @@
-const select = document.querySelector("#practice-set");
-const nextButton = document.querySelector("#next-question");
-const questionCard = document.querySelector("#question-card");
-const questionText = document.querySelector("#question-text");
-const toggleAnswer = document.querySelector("#toggle-answer");
-const answerBox = document.querySelector("#answer-box");
-const answerText = document.querySelector("#answer-text");
-const stepsList = document.querySelector("#steps-list");
-
-let practiceData = {};
-let cursor = {};
-let currentItem = null;
-
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -65,7 +52,8 @@ function generateAverageSpeed() {
   const first = randInt(2, time - 2) * speed;
   const total = time * speed;
   const second = total - first;
-  const place = pick(["书店", "邮局", "少年宫", "体育馆", "图书馆"]);
+  const places = ["书店", "邮局", "少年宫", "体育馆", "图书馆"];
+  const place = pick(places);
   return {
     question: `从家到${place}${first}米，从${place}到学校${second}米，一共走了${time}分钟，平均每分钟走多少米？`,
     answer: `${speed}米/分。`,
@@ -79,7 +67,8 @@ function generateTwoStepAverage() {
   const left = groups * each;
   const done = randInt(220, 680);
   const total = done + left;
-  const object = pick(["纸鹤", "小红花", "练习本", "爱心卡片"]);
+  const objects = ["纸鹤", "小红花", "练习本", "爱心卡片"];
+  const object = pick(objects);
   return {
     question: `班级要准备${total}个${object}，已经完成${done}个，剩下由${groups}个小组平均完成，每组要做多少个？`,
     answer: `${each}个。`,
@@ -224,59 +213,9 @@ const generators = {
   planCompare: generatePlanCompare
 };
 
-function setOptions(data) {
-  select.innerHTML = "";
-  for (const [id, set] of Object.entries(data.sets)) {
-    const option = document.createElement("option");
-    option.value = id;
-    option.textContent = set.title;
-    select.append(option);
-  }
-}
-
-function renderQuestion(item) {
-  currentItem = item;
-  questionCard.hidden = false;
-  questionText.textContent = item.question;
-  answerText.textContent = item.answer;
-  stepsList.innerHTML = "";
-  for (const step of item.steps) {
-    const li = document.createElement("li");
-    li.textContent = step;
-    stepsList.append(li);
-  }
-  answerBox.hidden = true;
-  toggleAnswer.textContent = "看答案";
-}
-
-function makeQuestion(set, index) {
-  const generator = set.generator ? generators[set.generator] : null;
+export function generatePracticeItem(practiceSet, fallbackIndex = 0) {
+  const generator = practiceSet?.generator ? generators[practiceSet.generator] : null;
   if (generator) return generator();
-  if (set.items?.length) return set.items[index % set.items.length];
+  if (practiceSet?.items?.length) return practiceSet.items[fallbackIndex % practiceSet.items.length];
   return null;
 }
-
-function nextQuestion() {
-  const setId = select.value;
-  const set = practiceData.sets[setId];
-  if (!set) return;
-  const nextIndex = cursor[setId] || 0;
-  const item = makeQuestion(set, nextIndex);
-  if (!item) return;
-  cursor[setId] = nextIndex + 1;
-  renderQuestion(item);
-}
-
-toggleAnswer.addEventListener("click", () => {
-  if (!currentItem) return;
-  answerBox.hidden = !answerBox.hidden;
-  toggleAnswer.textContent = answerBox.hidden ? "看答案" : "收起答案";
-});
-
-nextButton.addEventListener("click", nextQuestion);
-select.addEventListener("change", nextQuestion);
-
-const response = await fetch("./math-practice.json");
-practiceData = await response.json();
-setOptions(practiceData);
-nextQuestion();

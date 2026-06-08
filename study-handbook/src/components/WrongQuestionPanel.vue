@@ -89,6 +89,7 @@
 
 <script setup>
 import { reactive } from "vue";
+import { generatePracticeItem } from "../data/practiceGenerator.js";
 
 const props = defineProps({
   subject: { type: Object, required: true },
@@ -105,9 +106,10 @@ const practiceCursor = reactive({});
 
 function nextPractice(item) {
   const practiceSet = props.practiceSets[item.practiceSetId];
-  if (!practiceSet?.items?.length) return;
   const nextIndex = practiceCursor[item.id] ?? 0;
-  activePractice[item.id] = practiceSet.items[nextIndex % practiceSet.items.length];
+  const practiceItem = generatePracticeItem(practiceSet, nextIndex);
+  if (!practiceItem) return;
+  activePractice[item.id] = practiceItem;
   practiceCursor[item.id] = nextIndex + 1;
   shownAnswers[item.id] = false;
 }

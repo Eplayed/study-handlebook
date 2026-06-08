@@ -1,6 +1,7 @@
 export const mathPracticeSets = {
   "math-12-quotient-place": {
     title: "商的位置专项",
+    generator: "divisionPlace",
     items: [
       {
         question: "2846÷71，商的第一位应该写在哪一位？再算出结果。",
@@ -16,6 +17,7 @@ export const mathPracticeSets = {
   },
   "math-11-trial": {
     title: "试商和反推专项",
+    generator: "trialDivision",
     items: [
       {
         question: "□256÷32，如果商是三位数，□里最小能填几？",
@@ -31,6 +33,7 @@ export const mathPracticeSets = {
   },
   "math-6-average": {
     title: "平均速度专项",
+    generator: "averageSpeed",
     items: [
       {
         question: "小明走了 360 米，用了 6 分钟，平均每分钟走多少米？",
@@ -46,6 +49,7 @@ export const mathPracticeSets = {
   },
   "math-25-two-step": {
     title: "两步应用题专项",
+    generator: "twoStepAverage",
     items: [
       {
         question: "学校要折 840 朵花，已经折了 516 朵，剩下由 9 个小组完成，平均每组折几朵？",
@@ -61,6 +65,7 @@ export const mathPracticeSets = {
   },
   "math-4-unit": {
     title: "面积单位专项",
+    generator: "areaUnit",
     items: [
       {
         question: "18平方米=多少平方分米？",
@@ -76,6 +81,7 @@ export const mathPracticeSets = {
   },
   "math-22-table": {
     title: "周长面积表格专项",
+    generator: "shapeTable",
     items: [
       {
         question: "长方形长18厘米，宽7厘米，周长是多少？面积是多少？",
@@ -91,6 +97,7 @@ export const mathPracticeSets = {
   },
   "math-27-max-area": {
     title: "固定周长最大面积专项",
+    generator: "maxArea",
     items: [
       {
         question: "用20厘米长的绳子围长方形，长宽都是整厘米。长和宽分别是多少时面积最大？",
@@ -106,6 +113,7 @@ export const mathPracticeSets = {
   },
   "math-5-composite": {
     title: "组合图形面积专项",
+    generator: "compositeArea",
     items: [
       {
         question: "一个图形由两个长方形组成，面积分别是 24平方厘米 和 18平方厘米，总面积是多少？",
@@ -121,6 +129,7 @@ export const mathPracticeSets = {
   },
   "math-9-large-multiply": {
     title: "两位数乘三位数专项",
+    generator: "largeMultiply",
     items: [
       {
         question: "计算 306×24。",
@@ -136,6 +145,7 @@ export const mathPracticeSets = {
   },
   "math-2-order": {
     title: "递等式运算顺序专项",
+    generator: "orderOps",
     items: [
       {
         question: "计算 960-(240+180)÷6。",
@@ -151,6 +161,7 @@ export const mathPracticeSets = {
   },
   "math-25-best-plan": {
     title: "方案比较专项",
+    generator: "planCompare",
     items: [
       {
         question: "每张票28元，团体票10人一组240元。10个人买哪种更省？省多少元？",

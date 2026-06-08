@@ -11,7 +11,7 @@ export const handbookContent = {
     "英语：按上海教育出版社牛津上海版三年级下册 3B 模块目录整理，需与学校实际用书逐课校对。",
     "本地增量索引：在 study-handbook 目录运行 npm run index:learning，生成 .local/learning-assets-index.json，用来识别新增或变更资料。",
     "公开证据图：运行 npm run evidence:math 会从本地作业/老师笔记裁剪、遮挡隐私并生成 public/evidence/math 下的图片，GitHub Pages 可点击查看。",
-    "独立相似题练习页：/study-handlebook/practice/math.html，题库来自本项目静态数据，不依赖 AI。",
+    "独立相似题练习页：/study-handlebook/practice/math.html，题目由本项目内置规则随机生成，不依赖 AI。",
     "官方同步课程入口：上海智慧教育平台·空中课堂 https://basic.sh.smartedu.cn/airclassroom/",
     "教材索引参考：SteveTDX/shanghai_textbooks https://github.com/SteveTDX/shanghai_textbooks"
   ],
