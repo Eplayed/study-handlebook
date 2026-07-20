@@ -63,7 +63,7 @@ const units = [
   }
 ];
 
-const word = (id, english, meaning, example) => ({ id, english, meaning, example });
+const word = (id, english, meaning, example, audioUrl = "") => ({ id, english, meaning, example, audioUrl });
 
 export const grade4EnglishStudy = {
   source: "已按《义务教育教科书·英语 四年级上册》目录、Unit 1 第7-14页核对；其余单元的主题词和核心句型按教材目录页录入。",

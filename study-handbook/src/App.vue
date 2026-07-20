@@ -1,7 +1,17 @@
 <template>
-  <AppHeader @print="printPage" />
+  <AppHeader v-if="!isGrade4English" @print="printPage" />
 
-  <main class="layout">
+  <main v-if="isGrade4English" class="english-app-shell">
+    <EnglishAppBar
+      v-model:grade-id="gradeId"
+      v-model:subject-id="subjectId"
+      :grades="content.grades"
+      :subjects="grade.subjects"
+    />
+    <EnglishSummerStudy :subject="subject" />
+  </main>
+
+  <main v-else class="layout">
     <SidebarNav
       v-model:grade-id="gradeId"
       v-model:subject-id="subjectId"
@@ -11,12 +21,7 @@
     />
 
     <section class="content">
-      <EnglishSummerStudy
-        v-if="isGrade4English"
-        :subject="subject"
-      />
       <SubjectNotebook
-        v-else
         :subject="subject"
         :open-unit-ids="openUnitIds"
         :active-lesson-id="activeLessonId"
@@ -42,12 +47,14 @@ import { computed, nextTick, ref, watch } from "vue";
 import AppHeader from "./components/AppHeader.vue";
 import SidebarNav from "./components/SidebarNav.vue";
 import SubjectNotebook from "./components/SubjectNotebook.vue";
+import EnglishAppBar from "./components/EnglishAppBar.vue";
 import EnglishSummerStudy from "./components/EnglishSummerStudy.vue";
 import { handbookContent } from "./data/content.js";
 
 const content = handbookContent;
-const gradeId = ref(content.grades[0].id);
-const subjectId = ref(content.grades[0].defaultSubject);
+const defaultGrade = content.grades.find((item) => item.id === "grade4") || content.grades[0];
+const gradeId = ref(defaultGrade.id);
+const subjectId = ref(defaultGrade.defaultSubject);
 const openUnitIds = ref([]);
 const activeLessonId = ref("");
 
@@ -61,10 +68,7 @@ const standardNavItems = [
 const grade = computed(() => content.grades.find((item) => item.id === gradeId.value) || content.grades[0]);
 const subject = computed(() => grade.value.subjects.find((item) => item.id === subjectId.value) || grade.value.subjects[0]);
 const isGrade4English = computed(() => gradeId.value === "grade4" && subjectId.value === "english");
-const navItems = computed(() => isGrade4English.value
-  ? [["#summer-study", "今天学习"], ["#word-review", "错词复习"], ["#roadmap", "整册路线"], ["#sources", "资料来源"]].map(([href, label]) => ({ href, label }))
-  : standardNavItems
-);
+const navItems = computed(() => standardNavItems);
 watch(gradeId, () => {
   subjectId.value = grade.value.defaultSubject || grade.value.subjects[0].id;
 });

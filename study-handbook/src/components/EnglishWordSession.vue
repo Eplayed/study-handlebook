@@ -2,9 +2,8 @@
   <section id="summer-study" class="english-session" aria-live="polite">
     <div class="session-heading">
       <div>
-        <p class="eyebrow">{{ mode === "review" ? "错词回炉" : "今天的英语" }}</p>
+        <p class="eyebrow">{{ mode === "review" ? "错词本" : "今日单词" }}</p>
         <h2>{{ unit.title }}</h2>
-        <p>{{ mode === "review" ? "把上次写错的词再默写一遍。答对后，它会离开复习队列。" : `这一组共 ${words.length} 个词。先认识，再默写，最后练一句。` }}</p>
       </div>
       <span class="session-step">{{ stepLabel }}</span>
     </div>
@@ -14,7 +13,8 @@
       <h3 class="english-word">{{ currentWord.english }}</h3>
       <p class="word-meaning">{{ currentWord.meaning }}</p>
       <p class="word-example">{{ currentWord.example }}</p>
-      <button class="speak-button" type="button" @click="speak(currentWord.english)">朗读单词</button>
+      <button class="speak-button" type="button" @click="speak(currentWord)">朗读单词</button>
+      <span v-if="audioStatus" class="audio-status" :class="{ error: audioError }">{{ audioStatus }}</span>
       <div class="session-actions split-actions">
         <button class="small-button" type="button" :disabled="wordIndex === 0" @click="previousWord">上一个</button>
         <button v-if="wordIndex < words.length - 1" class="small-button primary" type="button" @click="nextWord">下一个</button>
@@ -25,7 +25,6 @@
     <div v-else-if="step === 'dictation'" class="word-stage dictation-stage">
       <p class="word-count">默写第 {{ wordIndex + 1 }} / {{ words.length }} 个</p>
       <h3>{{ currentWord.meaning }}</h3>
-      <p class="dictation-hint">请写出对应的英文单词或词组。</p>
       <label class="sr-only" for="wordAnswer">英文答案</label>
       <input id="wordAnswer" v-model="answer" class="dictation-input" autocomplete="off" autocapitalize="none" spellcheck="false" :disabled="Boolean(answerResult)" @keydown.enter.prevent="checkWord" />
       <p v-if="answerResult === 'correct'" class="answer-feedback correct">写对了，{{ currentWord.english }}。</p>
@@ -45,7 +44,8 @@
       <p v-if="sentenceResult === 'correct'" class="answer-feedback correct">句型写对了。</p>
       <p v-else-if="sentenceResult === 'wrong'" class="answer-feedback wrong">正确答案：<strong>{{ sentence.model }}</strong></p>
       <div class="session-actions split-actions">
-        <button class="small-button" type="button" @click="speak(sentence.model)">朗读整句</button>
+        <button class="small-button" type="button" @click="speak(sentence.model)">朗读</button>
+        <span v-if="audioStatus" class="audio-status" :class="{ error: audioError }">{{ audioStatus }}</span>
         <button v-if="!sentenceResult" class="small-button primary" type="button" @click="checkSentence">检查</button>
         <button v-else class="small-button primary" type="button" @click="finish">完成这一组</button>
       </div>
@@ -79,6 +79,8 @@ const answerResult = ref("");
 const sentenceAnswer = ref("");
 const sentenceResult = ref("");
 const missedIds = ref([]);
+const audioStatus = ref("");
+const audioError = ref(false);
 
 const currentWord = computed(() => props.words[wordIndex.value]);
 const missedWords = computed(() => props.words.filter((item) => missedIds.value.includes(item.id)));
@@ -90,13 +92,36 @@ function normalize(value) {
   return value.toLowerCase().trim().replace(/[’‘]/g, "'").replace(/[-\s]+/g, " ");
 }
 
-function speak(text) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
+function speak(item) {
+  const text = typeof item === "string" ? item : item.english;
+  if (typeof item === "object" && item.audioUrl) {
+    const player = new Audio(item.audioUrl);
+    player.onplay = () => { audioError.value = false; audioStatus.value = "正在朗读"; };
+    player.onended = () => { audioStatus.value = ""; };
+    player.onerror = () => { audioError.value = true; audioStatus.value = "音频没有播放"; };
+    player.play().catch(() => { audioError.value = true; audioStatus.value = "音频没有播放"; });
+    return;
+  }
+
+  if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+    audioError.value = true;
+    audioStatus.value = "此设备不支持朗读";
+    return;
+  }
+
+  const synth = window.speechSynthesis;
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "en-US";
-  utterance.rate = 0.82;
-  window.speechSynthesis.speak(utterance);
+  const voice = synth.getVoices().find((item) => item.lang === "en-US") || synth.getVoices().find((item) => item.lang.startsWith("en"));
+  if (voice) utterance.voice = voice;
+  utterance.lang = voice?.lang || "en-US";
+  utterance.rate = 0.8;
+  utterance.onstart = () => { audioError.value = false; audioStatus.value = "正在朗读"; };
+  utterance.onend = () => { audioStatus.value = ""; };
+  utterance.onerror = () => { audioError.value = true; audioStatus.value = "朗读没有播放，请检查设备音量"; };
+
+  synth.cancel();
+  synth.resume();
+  window.setTimeout(() => synth.speak(utterance), 20);
 }
 
 function resetSession() {
@@ -107,6 +132,8 @@ function resetSession() {
   sentenceAnswer.value = "";
   sentenceResult.value = "";
   missedIds.value = [];
+  audioStatus.value = "";
+  audioError.value = false;
 }
 
 function previousWord() { wordIndex.value -= 1; }

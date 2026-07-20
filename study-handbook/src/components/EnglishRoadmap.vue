@@ -2,10 +2,10 @@
   <section id="roadmap" class="english-roadmap">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">整册路线</p>
-        <h2>从一单元开始，一组一组往前学</h2>
+        <p class="eyebrow">单元</p>
+        <h2>学习路线</h2>
       </div>
-      <span class="roadmap-count">已学习 {{ learnedCount }} / {{ totalWords }} 词</span>
+      <span class="roadmap-count">{{ learnedCount }} / {{ totalWords }} 词</span>
     </div>
     <div class="roadmap-list">
       <button

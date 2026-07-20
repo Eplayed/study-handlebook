@@ -2,19 +2,12 @@
   <section id="notebook" class="english-notebook">
     <section class="summer-intro">
       <div>
-        <p class="eyebrow">四年级英语暑假预习</p>
-        <h2>每天 5 到 10 个词，先会读，再会写</h2>
-        <p>{{ subject.study.source }}</p>
+        <p class="eyebrow">{{ selectedUnit.title }}</p>
+        <h2>今天学单词</h2>
       </div>
       <div class="daily-size" aria-label="每天学习数量">
-        <span>今天学</span>
-        <button v-for="size in [5, 10]" :key="size" type="button" :class="{ active: targetSize === size }" @click="targetSize = size">{{ size }} 个</button>
+        <button v-for="size in [5, 10]" :key="size" type="button" :class="{ active: targetSize === size }" @click="targetSize = size">{{ size }} 词</button>
       </div>
-    </section>
-
-    <section v-if="reviewWords.length" id="word-review" class="review-strip">
-      <div><strong>有 {{ reviewWords.length }} 个错词等着再写一次</strong><span>答对后会自动离开复习队列。</span></div>
-      <button class="small-button danger" type="button" @click="startReview">先复习错词</button>
     </section>
 
     <EnglishWordSession
@@ -34,12 +27,14 @@
       <p v-else>整册主题词都已经完成，可以用下方路线选择任意单元复习。</p>
     </section>
 
+    <EnglishMistakeBook :words="allWords" :mistakes="progress.mistakes" @review="startReview" />
     <EnglishRoadmap :units="subject.study.units" :selected-unit-id="selectedUnitId" :learned-ids="progress.learnedIds" @select-unit="selectUnit" />
   </section>
 </template>
 
 <script setup>
 import { computed, ref, watch } from "vue";
+import EnglishMistakeBook from "./EnglishMistakeBook.vue";
 import EnglishRoadmap from "./EnglishRoadmap.vue";
 import EnglishWordSession from "./EnglishWordSession.vue";
 
