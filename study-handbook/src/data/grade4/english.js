@@ -1,5 +1,7 @@
 import { exam, lesson } from "../helpers.js";
 
+const word = (id, english, meaning, example = "", audioUrl = "") => ({ id, english, meaning, example, audioUrl });
+
 const units = [
   {
     id: "g4-en-u1",
@@ -63,10 +65,109 @@ const units = [
   }
 ];
 
-const word = (id, english, meaning, example, audioUrl = "") => ({ id, english, meaning, example, audioUrl });
+const wordsToUseAdditions = {
+  u1: [
+    word("g4u1-keep-tidy", "keep ... tidy", "保持……整洁"),
+    word("g4u1-begin", "begin", "开始"),
+    word("g4u1-project", "project", "专题研究；项目"),
+    word("g4u1-reading-room", "reading room", "阅览室"),
+    word("g4u1-let", "let", "允许；让"),
+    word("g4u1-bamboo", "bamboo", "竹子"),
+    word("g4u1-tall", "tall", "高大的"),
+    word("g4u1-believe", "believe it or not", "信不信由你"),
+    word("g4u1-student", "student", "学生")
+  ],
+  u2: [
+    word("g4u2-often", "often", "时常"),
+    word("g4u2-always", "always", "总是"),
+    word("g4u2-english", "English", "英语"),
+    word("g4u2-duck", "duck", "躲闪；躲避")
+  ],
+  u3: [
+    word("g4u3-black", "black", "黑的；黑色的"),
+    word("g4u3-white", "white", "白的；白色的"),
+    word("g4u3-golden", "golden", "金色的"),
+    word("g4u3-grey", "grey", "灰色的"),
+    word("g4u3-trunk", "trunk", "象鼻"),
+    word("g4u3-india", "India", "印度"),
+    word("g4u3-africa", "Africa", "非洲"),
+    word("g4u3-tail", "tail", "尾巴"),
+    word("g4u3-kind", "kind", "友好的"),
+    word("g4u3-north-pole", "the North Pole", "北极"),
+    word("g4u3-warm", "warm", "温暖的"),
+    word("g4u3-bed", "bed", "床")
+  ],
+  u4: [
+    word("g4u4-bring", "bring", "带来"),
+    word("g4u4-child", "child", "儿童"),
+    word("g4u4-tradition", "tradition", "传统"),
+    word("g4u4-love", "love", "爱；热爱"),
+    word("g4u4-bowl", "bowl", "碗"),
+    word("g4u4-wish", "wish", "祝愿"),
+    word("g4u4-soup", "soup", "汤；羹")
+  ],
+  u5: [
+    word("g4u5-go-around", "go around", "参观（附近某处）"),
+    word("g4u5-boat", "boat", "小船"),
+    word("g4u5-photo", "photo", "照片"),
+    word("g4u5-amazing", "amazing", "令人惊奇的"),
+    word("g4u5-waterway", "waterway", "水路；航道"),
+    word("g4u5-people", "people", "人")
+  ],
+  u6: [
+    word("g4u6-boy", "boy", "男孩"),
+    word("g4u6-girl", "girl", "女孩"),
+    word("g4u6-piece", "piece", "片；块"),
+    word("g4u6-pine-tree", "pine tree", "松树")
+  ],
+  u7: [
+    word("g4u7-menu", "menu", "菜单"),
+    word("g4u7-soya-milk", "soya milk", "豆浆"),
+    word("g4u7-week", "week", "周；星期"),
+    word("g4u7-eat", "eat", "吃"),
+    word("g4u7-tomorrow", "tomorrow", "明天"),
+    word("g4u7-energy", "energy", "能量"),
+    word("g4u7-protein", "protein", "蛋白质"),
+    word("g4u7-vitamin", "vitamin", "维生素"),
+    word("g4u7-cry", "cry", "喊叫；呼喊")
+  ],
+  u8: [
+    word("g4u8-on-time", "on time", "准时"),
+    word("g4u8-stop", "stop", "停止；停下"),
+    word("g4u8-doll", "doll", "玩偶；玩具娃娃"),
+    word("g4u8-carelessly", "carelessly", "不小心地"),
+    word("g4u8-break", "break", "打碎；打破"),
+    word("g4u8-arm", "arm", "手臂"),
+    word("g4u8-anyway", "anyway", "无论如何；反正"),
+    word("g4u8-empty", "empty", "空的"),
+    word("g4u8-pot", "pot", "罐；壶；锅"),
+    word("g4u8-seed", "seed", "种子"),
+    word("g4u8-month", "month", "月份"),
+    word("g4u8-moon", "the moon", "月球"),
+    word("g4u8-night", "night", "夜；夜晚")
+  ],
+  u9: [
+    word("g4u9-evening", "evening", "晚上；傍晚"),
+    word("g4u9-prepare", "prepare", "使（自己）有准备"),
+    word("g4u9-line", "line", "线条"),
+    word("g4u9-circle", "circle", "圆形"),
+    word("g4u9-explain", "explain", "解释；说明"),
+    word("g4u9-earth", "the earth", "地球")
+  ],
+  u10: [
+    word("g4u10-father", "father", "父亲；爸爸"),
+    word("g4u10-brother", "brother", "哥哥；弟弟"),
+    word("g4u10-reporter", "weather reporter", "天气预报员"),
+    word("g4u10-lamb", "lamb", "小羊"),
+    word("g4u10-tortoise", "tortoise", "陆龟"),
+    word("g4u10-sign", "sign", "迹象；征兆"),
+    word("g4u10-continue", "continue", "（停顿后）继续说"),
+    word("g4u10-heavy-rain", "heavy rain", "大雨")
+  ]
+};
 
 export const grade4EnglishStudy = {
-  source: "已按《义务教育教科书·英语 四年级上册》目录、Unit 1 第7-14页核对；其余单元的主题词和核心句型按教材目录页录入。",
+  source: "已按《义务教育教科书·英语 四年级上册》目录、Unit 1 第7-14页和第87-89页 Words to use 总表核对。",
   units: [
     {
       id: "g4-en-u1",
@@ -79,7 +180,8 @@ export const grade4EnglishStudy = {
         word("g4u1-library", "library", "图书馆", "The library is best of all."),
         word("g4u1-computer-room", "computer room", "电脑房", "The computer room is on the ground floor."),
         word("g4u1-school-building", "school building", "教学楼", "This school building is very special."),
-        word("g4u1-art-room", "art room", "美术教室", "We draw pictures in the art room.")
+        word("g4u1-art-room", "art room", "美术教室", "We draw pictures in the art room."),
+        ...wordsToUseAdditions.u1
       ],
       sentence: {
         title: "问地点，再说地点",
@@ -94,63 +196,63 @@ export const grade4EnglishStudy = {
       id: "g4-en-u2",
       title: "Unit 2 My classmates",
       page: "教材第15-22页",
-      words: [word("g4u2-lovely", "lovely", "可爱的", "She is a lovely girl."), word("g4u2-different", "different", "不同的", "We are all different."), word("g4u2-great", "great", "很棒的", "You are a great friend."), word("g4u2-polite", "polite", "有礼貌的", "He is polite to everyone."), word("g4u2-interesting", "interesting", "有趣的", "Her story is interesting."), word("g4u2-helpful", "helpful", "乐于助人的", "My classmate is helpful.")],
+      words: [word("g4u2-lovely", "lovely", "可爱的", "She is a lovely girl."), word("g4u2-different", "different", "不同的", "We are all different."), word("g4u2-great", "great", "很棒的", "You are a great friend."), word("g4u2-polite", "polite", "有礼貌的", "He is polite to everyone."), word("g4u2-interesting", "interesting", "有趣的", "Her story is interesting."), word("g4u2-helpful", "helpful", "乐于助人的", "My classmate is helpful."), ...wordsToUseAdditions.u2],
       sentence: { title: "说同学能帮忙做什么", chinese: "她帮助我搬书。", model: "She helps me carry books.", before: "She helps me ", answer: "carry books", after: "." }
     },
     {
       id: "g4-en-u3",
       title: "Unit 3 Animals and their homes",
       page: "教材第23-30页",
-      words: [word("g4u3-panda", "panda", "大熊猫", "The panda is eating bamboo."), word("g4u3-hometown", "hometown", "家乡", "Yunnan is the elephants' hometown."), word("g4u3-monkey", "monkey", "猴子", "The monkey is in the tree."), word("g4u3-elephant", "elephant", "大象", "The elephant has a long nose."), word("g4u3-family", "family", "家庭；家族", "This is an elephant family."), word("g4u3-baby-elephant", "baby elephant", "小象", "The baby elephant is with its mother."), word("g4u3-polar-bear", "polar bear", "北极熊", "The polar bear lives in a cold place.")],
+      words: [word("g4u3-panda", "panda", "大熊猫", "The panda is eating bamboo."), word("g4u3-hometown", "hometown", "家乡", "Yunnan is the elephants' hometown."), word("g4u3-monkey", "monkey", "猴子", "The monkey is in the tree."), word("g4u3-elephant", "elephant", "大象", "The elephant has a long nose."), word("g4u3-family", "family", "家庭；家族", "This is an elephant family."), word("g4u3-baby-elephant", "baby elephant", "小象", "The baby elephant is with its mother."), word("g4u3-polar-bear", "polar bear", "北极熊", "The polar bear lives in a cold place."), ...wordsToUseAdditions.u3],
       sentence: { title: "说动物正在做什么", chinese: "大象正在走路。", model: "The elephants are walking.", before: "The elephants are ", answer: "walking", after: "." }
     },
     {
       id: "g4-en-u4",
       title: "Unit 4 Our birthday",
       page: "教材第31-38页",
-      words: [word("g4u4-invitation", "invitation", "邀请；请柬", "This is a birthday invitation."), word("g4u4-party", "party", "聚会", "We have a birthday party."), word("g4u4-activity", "activity", "活动", "The party activity is fun."), word("g4u4-share-cake", "share a cake", "分享蛋糕", "We share a cake together."), word("g4u4-letter", "letter", "信", "I write a letter to Mum."), word("g4u4-noodles", "noodles", "面条", "We eat noodles on birthdays."), word("g4u4-egg", "egg", "鸡蛋", "There is an egg in the bowl.")],
+      words: [word("g4u4-invitation", "invitation", "邀请；请柬", "This is a birthday invitation."), word("g4u4-party", "party", "聚会", "We have a birthday party."), word("g4u4-activity", "activity", "活动", "The party activity is fun."), word("g4u4-share-cake", "share a cake", "分享蛋糕", "We share a cake together."), word("g4u4-letter", "letter", "信", "I write a letter to Mum."), word("g4u4-noodles", "noodles", "面条", "We eat noodles on birthdays."), word("g4u4-egg", "egg", "鸡蛋", "There is an egg in the bowl."), ...wordsToUseAdditions.u4],
       sentence: { title: "介绍一种传统", chinese: "生日时吃面是一种传统。", model: "It's a tradition to eat noodles on birthdays.", before: "It's a tradition to ", answer: "eat noodles", after: " on birthdays." }
     },
     {
       id: "g4-en-u5",
       title: "Unit 5 Visiting places",
       page: "教材第39-46页",
-      words: [word("g4u5-neighbourhood", "neighbourhood", "社区；街区", "My neighbourhood is nice."), word("g4u5-park", "park", "公园", "There is a park near my home."), word("g4u5-bakery", "bakery", "面包店", "The bakery has fresh bread."), word("g4u5-museum", "museum", "博物馆", "We visit the museum."), word("g4u5-cinema", "cinema", "电影院", "The cinema is next to the shop."), word("g4u5-supermarket", "supermarket", "超市", "Mum goes to the supermarket."), word("g4u5-bridge", "bridge", "桥", "There is a bridge over the river."), word("g4u5-shop", "shop", "商店", "The shop is open today.")],
+      words: [word("g4u5-neighbourhood", "neighbourhood", "社区；街区", "My neighbourhood is nice."), word("g4u5-park", "park", "公园", "There is a park near my home."), word("g4u5-bakery", "bakery", "面包店", "The bakery has fresh bread."), word("g4u5-museum", "museum", "博物馆", "We visit the museum."), word("g4u5-cinema", "cinema", "电影院", "The cinema is next to the shop."), word("g4u5-supermarket", "supermarket", "超市", "Mum goes to the supermarket."), word("g4u5-bridge", "bridge", "桥", "There is a bridge over the river."), word("g4u5-shop", "shop", "商店", "The shop is open today."), ...wordsToUseAdditions.u5],
       sentence: { title: "问某地有没有某物", chinese: "附近有博物馆吗？是的，有。", model: "Is there a museum nearby? Yes, there is.", before: "Yes, there ", answer: "is", after: "." }
     },
     {
       id: "g4-en-u6",
       title: "Unit 6 It's autumn!",
       page: "教材第47-54页",
-      words: [word("g4u6-autumn", "autumn", "秋天", "Autumn is a beautiful season."), word("g4u6-farm", "farm", "农场", "We visit a farm in autumn."), word("g4u6-fall", "fall", "落下", "Leaves fall in autumn."), word("g4u6-leaf", "leaf", "叶子", "This leaf is yellow."), word("g4u6-fruit", "fruit", "水果", "The fruit is sweet."), word("g4u6-fly-south", "fly south", "飞往南方", "Some birds fly south."), word("g4u6-apple", "apple", "苹果", "The apple is red.")],
+      words: [word("g4u6-autumn", "autumn", "秋天", "Autumn is a beautiful season."), word("g4u6-farm", "farm", "农场", "We visit a farm in autumn."), word("g4u6-fall", "fall", "落下", "Leaves fall in autumn."), word("g4u6-leaf", "leaf", "叶子", "This leaf is yellow."), word("g4u6-fruit", "fruit", "水果", "The fruit is sweet."), word("g4u6-fly-south", "fly south", "飞往南方", "Some birds fly south."), word("g4u6-apple", "apple", "苹果", "The apple is red."), ...wordsToUseAdditions.u6],
       sentence: { title: "用 How 表达感叹", chinese: "这些叶子多么漂亮啊！", model: "How beautiful the leaves are!", before: "How ", answer: "beautiful", after: " the leaves are!" }
     },
     {
       id: "g4-en-u7",
       title: "Unit 7 My healthy breakfast",
       page: "教材第55-62页",
-      words: [word("g4u7-breakfast", "breakfast", "早餐", "Breakfast is important."), word("g4u7-bread", "bread", "面包", "I have bread for breakfast."), word("g4u7-porridge", "porridge", "粥", "Dad likes porridge."), word("g4u7-juice", "juice", "果汁", "I drink some juice."), word("g4u7-milk", "milk", "牛奶", "Milk is good for us."), word("g4u7-banana", "banana", "香蕉", "The banana is yellow.")],
+      words: [word("g4u7-breakfast", "breakfast", "早餐", "Breakfast is important."), word("g4u7-bread", "bread", "面包", "I have bread for breakfast."), word("g4u7-porridge", "porridge", "粥", "Dad likes porridge."), word("g4u7-juice", "juice", "果汁", "I drink some juice."), word("g4u7-milk", "milk", "牛奶", "Milk is good for us."), word("g4u7-banana", "banana", "香蕉", "The banana is yellow."), ...wordsToUseAdditions.u7],
       sentence: { title: "问一周做几次", chinese: "你一周喝几次牛奶？两次。", model: "How often do you drink milk? Twice a week.", before: "Twice ", answer: "a week", after: "." }
     },
     {
       id: "g4-en-u8",
       title: "Unit 8 Be honest",
       page: "教材第63-70页",
-      words: [word("g4u8-keep-word", "keep one's word", "守信用", "We should keep our word."), word("g4u8-give-back", "give ... back", "归还……", "Please give the book back."), word("g4u8-trust", "trust each other", "彼此信任", "Friends trust each other."), word("g4u8-honest", "honest", "诚实的", "An honest child tells the truth."), word("g4u8-honesty", "honesty", "诚实", "Honesty is important."), word("g4u8-tell-truth", "tell the truth", "说实话", "You should tell the truth."), word("g4u8-never-lie", "never tell a lie", "从不说谎", "We should never tell a lie.")],
+      words: [word("g4u8-keep-word", "keep one's word", "守信用", "We should keep our word."), word("g4u8-give-back", "give ... back", "归还……", "Please give the book back."), word("g4u8-trust", "trust each other", "彼此信任", "Friends trust each other."), word("g4u8-honest", "honest", "诚实的", "An honest child tells the truth."), word("g4u8-honesty", "honesty", "诚实", "Honesty is important."), word("g4u8-tell-truth", "tell the truth", "说实话", "You should tell the truth."), word("g4u8-never-lie", "never tell a lie", "从不说谎", "We should never tell a lie."), ...wordsToUseAdditions.u8],
       sentence: { title: "用 should 给建议", chinese: "你应该说实话。", model: "You should tell the truth.", before: "You should ", answer: "tell the truth", after: "." }
     },
     {
       id: "g4-en-u9",
       title: "Unit 9 What time is it?",
       page: "教材第71-78页",
-      words: [word("g4u9-time", "time", "时间", "What time is it?"), word("g4u9-hour-hand", "hour hand", "时针", "The hour hand is short."), word("g4u9-minute-hand", "minute hand", "分针", "The minute hand is long."), word("g4u9-seven", "seven o'clock", "七点整", "It is seven o'clock."), word("g4u9-half-eleven", "half past eleven", "十一点半", "It is half past eleven."), word("g4u9-ten-four", "ten to four", "差十分四点", "It is ten to four.")],
+      words: [word("g4u9-time", "time", "时间", "What time is it?"), word("g4u9-hour-hand", "hour hand", "时针", "The hour hand is short."), word("g4u9-minute-hand", "minute hand", "分针", "The minute hand is long."), word("g4u9-seven", "seven o'clock", "七点整", "It is seven o'clock."), word("g4u9-half-eleven", "half past eleven", "十一点半", "It is half past eleven."), word("g4u9-ten-four", "ten to four", "差十分四点", "It is ten to four."), ...wordsToUseAdditions.u9],
       sentence: { title: "说整点时间", chinese: "现在几点？七点整。", model: "What time is it? It's seven o'clock.", before: "It's ", answer: "seven o'clock", after: "." }
     },
     {
       id: "g4-en-u10",
       title: "Unit 10 Weather",
       page: "教材第79-86页",
-      words: [word("g4u10-sunny", "sunny", "晴朗的", "It is sunny today."), word("g4u10-rainy", "rainy", "下雨的", "It is rainy in Shanghai."), word("g4u10-cloudy", "cloudy", "多云的", "It is cloudy this morning."), word("g4u10-windy", "windy", "有风的", "It is windy outside."), word("g4u10-snowy", "snowy", "下雪的", "It is snowy in winter."), word("g4u10-weather", "weather", "天气", "The weather is nice."), word("g4u10-report", "weather report", "天气预报", "Let's watch the weather report."), word("g4u10-degree", "degree", "度", "It is twenty degrees.")],
+      words: [word("g4u10-sunny", "sunny", "晴朗的", "It is sunny today."), word("g4u10-rainy", "rainy", "下雨的", "It is rainy in Shanghai."), word("g4u10-cloudy", "cloudy", "多云的", "It is cloudy this morning."), word("g4u10-windy", "windy", "有风的", "It is windy outside."), word("g4u10-snowy", "snowy", "下雪的", "It is snowy in winter."), word("g4u10-weather", "weather", "天气", "The weather is nice."), word("g4u10-report", "weather report", "天气预报", "Let's watch the weather report."), word("g4u10-degree", "degree", "度", "It is twenty degrees."), ...wordsToUseAdditions.u10],
       sentence: { title: "问天气", chinese: "上海天气怎么样？下雨。", model: "How's the weather in Shanghai? It's rainy.", before: "It's ", answer: "rainy", after: "." }
     }
   ]

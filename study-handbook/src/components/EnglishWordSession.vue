@@ -12,7 +12,7 @@
       <p class="word-count">第 {{ wordIndex + 1 }} / {{ words.length }} 个</p>
       <h3 class="english-word">{{ currentWord.english }}</h3>
       <p class="word-meaning">{{ currentWord.meaning }}</p>
-      <p class="word-example">{{ currentWord.example }}</p>
+      <p v-if="currentWord.example" class="word-example">{{ currentWord.example }}</p>
       <button class="speak-button" type="button" @click="speak(currentWord)">朗读单词</button>
       <span v-if="audioStatus" class="audio-status" :class="{ error: audioError }">{{ audioStatus }}</span>
       <a v-if="audioSource" class="audio-source" :href="audioSource.sourceUrl" target="_blank" rel="noreferrer">在线音源{{ audioSource.licenseName ? ` · ${audioSource.licenseName}` : "" }}</a>
