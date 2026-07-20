@@ -15,6 +15,7 @@
       <p class="word-example">{{ currentWord.example }}</p>
       <button class="speak-button" type="button" @click="speak(currentWord)">朗读单词</button>
       <span v-if="audioStatus" class="audio-status" :class="{ error: audioError }">{{ audioStatus }}</span>
+      <a v-if="audioSource" class="audio-source" :href="audioSource.sourceUrl" target="_blank" rel="noreferrer">在线音源{{ audioSource.licenseName ? ` · ${audioSource.licenseName}` : "" }}</a>
       <div class="session-actions split-actions">
         <button class="small-button" type="button" :disabled="wordIndex === 0" @click="previousWord">上一个</button>
         <button v-if="wordIndex < words.length - 1" class="small-button primary" type="button" @click="nextWord">下一个</button>
@@ -46,6 +47,7 @@
       <div class="session-actions split-actions">
         <button class="small-button" type="button" @click="speak(sentence.model)">朗读</button>
         <span v-if="audioStatus" class="audio-status" :class="{ error: audioError }">{{ audioStatus }}</span>
+        <a v-if="audioSource" class="audio-source" :href="audioSource.sourceUrl" target="_blank" rel="noreferrer">在线音源{{ audioSource.licenseName ? ` · ${audioSource.licenseName}` : "" }}</a>
         <button v-if="!sentenceResult" class="small-button primary" type="button" @click="checkSentence">检查</button>
         <button v-else class="small-button primary" type="button" @click="finish">完成这一组</button>
       </div>
@@ -62,7 +64,8 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { findOnlinePronunciation } from "../services/onlinePronunciation.js";
 
 const props = defineProps({
   words: { type: Array, required: true },
@@ -81,6 +84,8 @@ const sentenceResult = ref("");
 const missedIds = ref([]);
 const audioStatus = ref("");
 const audioError = ref(false);
+const audioSource = ref(null);
+let audioPlayer = null;
 
 const currentWord = computed(() => props.words[wordIndex.value]);
 const missedWords = computed(() => props.words.filter((item) => missedIds.value.includes(item.id)));
@@ -92,17 +97,44 @@ function normalize(value) {
   return value.toLowerCase().trim().replace(/[’‘]/g, "'").replace(/[-\s]+/g, " ");
 }
 
-function speak(item) {
+async function speak(item) {
   const text = typeof item === "string" ? item : item.english;
+  stopAudio();
+  audioStatus.value = "加载在线音源";
+  audioError.value = false;
+  audioSource.value = null;
+
   if (typeof item === "object" && item.audioUrl) {
-    const player = new Audio(item.audioUrl);
-    player.onplay = () => { audioError.value = false; audioStatus.value = "正在朗读"; };
-    player.onended = () => { audioStatus.value = ""; };
-    player.onerror = () => { audioError.value = true; audioStatus.value = "音频没有播放"; };
-    player.play().catch(() => { audioError.value = true; audioStatus.value = "音频没有播放"; });
+    playAudio(item.audioUrl, null, text);
     return;
   }
 
+  const pronunciation = await findOnlinePronunciation(text);
+  if (pronunciation) {
+    playAudio(pronunciation.url, pronunciation, text);
+    return;
+  }
+
+  speakWithDeviceVoice(text);
+}
+
+function playAudio(url, source, fallbackText) {
+  audioPlayer = new Audio(url);
+  audioSource.value = source;
+  let hasFailed = false;
+  const fallBack = () => {
+    if (hasFailed) return;
+    hasFailed = true;
+    audioSource.value = null;
+    speakWithDeviceVoice(fallbackText);
+  };
+  audioPlayer.onplay = () => { audioError.value = false; audioStatus.value = "正在朗读"; };
+  audioPlayer.onended = () => { audioStatus.value = ""; };
+  audioPlayer.onerror = fallBack;
+  audioPlayer.play().catch(fallBack);
+}
+
+function speakWithDeviceVoice(text) {
   if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
     audioError.value = true;
     audioStatus.value = "此设备不支持朗读";
@@ -124,6 +156,14 @@ function speak(item) {
   window.setTimeout(() => synth.speak(utterance), 20);
 }
 
+function stopAudio() {
+  if (audioPlayer) {
+    audioPlayer.pause();
+    audioPlayer = null;
+  }
+  window.speechSynthesis?.cancel();
+}
+
 function resetSession() {
   step.value = "learn";
   wordIndex.value = 0;
@@ -134,7 +174,10 @@ function resetSession() {
   missedIds.value = [];
   audioStatus.value = "";
   audioError.value = false;
+  audioSource.value = null;
 }
+
+onBeforeUnmount(stopAudio);
 
 function previousWord() { wordIndex.value -= 1; }
 function nextWord() { wordIndex.value += 1; }

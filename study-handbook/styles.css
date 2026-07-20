@@ -694,6 +694,13 @@ li { margin: 4px 0; }
 
 .audio-status.error { color: #a84431; }
 
+.audio-source {
+  color: #5a7771;
+  font-size: 12px;
+  font-weight: 800;
+  text-underline-offset: 2px;
+}
+
 .session-actions { margin-top: auto; padding-top: 22px; }
 .split-actions { min-width: min(100%, 420px); }
 .split-actions .small-button { min-height: 46px; border-radius: 6px; }
