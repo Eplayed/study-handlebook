@@ -1,6 +1,7 @@
 import { chineseSubject } from "./grade3/chinese.js";
 import { englishSubject } from "./grade3/english.js";
 import { mathSubject } from "./grade3/math.js";
+import { grade4EnglishSubject } from "./grade4/english.js";
 
 export const handbookContent = {
   appName: "学习记事本",
@@ -9,6 +10,7 @@ export const handbookContent = {
     "语文：已按国家中小学智慧教育平台《义务教育教科书·语文三年级下册》电子教材目录核对；学校实际进度仍需按老师资料同步。",
     "数学：已按本地《数学三年级第二学期.pdf》目录核对；错题来自 /Users/zhangyajun/Documents/学习/数学/练习卷/作业 中已批改作业照片。",
     "英语：按上海教育出版社牛津上海版三年级下册 3B 模块目录整理，需与学校实际用书逐课校对。",
+    "四年级英语：已根据本地《义务教育教科书·英语 四年级上册》建立暑假预习流程；Unit 1 的词汇和正文句型已逐页核对，其余单元先录入教材目录中的主题词与核心句型。",
     "本地增量索引：在 study-handbook 目录运行 npm run index:learning，生成 .local/learning-assets-index.json，用来识别新增或变更资料。",
     "公开证据图：运行 npm run evidence:math 会从本地作业/老师笔记裁剪、遮挡隐私并生成 public/evidence/math 下的图片，GitHub Pages 可点击查看。",
     "独立相似题练习页：/study-handlebook/practice/math.html，题目由本项目内置规则随机生成，不依赖 AI。",
@@ -25,7 +27,7 @@ export const handbookContent = {
     {
       id: "grade4",
       label: "四年级",
-      defaultSubject: "chinese",
+      defaultSubject: "english",
       subjects: [
         {
           id: "chinese",
@@ -34,7 +36,8 @@ export const handbookContent = {
           textbook: "待补充学校实际教材",
           units: [],
           wrongQuestions: []
-        }
+        },
+        grade4EnglishSubject
       ]
     }
   ]

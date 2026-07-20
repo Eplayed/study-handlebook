@@ -11,7 +11,12 @@
     />
 
     <section class="content">
+      <EnglishSummerStudy
+        v-if="isGrade4English"
+        :subject="subject"
+      />
       <SubjectNotebook
+        v-else
         :subject="subject"
         :open-unit-ids="openUnitIds"
         :active-lesson-id="activeLessonId"
@@ -37,6 +42,7 @@ import { computed, nextTick, ref, watch } from "vue";
 import AppHeader from "./components/AppHeader.vue";
 import SidebarNav from "./components/SidebarNav.vue";
 import SubjectNotebook from "./components/SubjectNotebook.vue";
+import EnglishSummerStudy from "./components/EnglishSummerStudy.vue";
 import { handbookContent } from "./data/content.js";
 
 const content = handbookContent;
@@ -45,7 +51,7 @@ const subjectId = ref(content.grades[0].defaultSubject);
 const openUnitIds = ref([]);
 const activeLessonId = ref("");
 
-const navItems = [
+const standardNavItems = [
   ["#notebook", "学习记事本"],
   ["#units", "单元和课文"],
   ["#wrong-links", "错题关联"],
@@ -54,6 +60,11 @@ const navItems = [
 
 const grade = computed(() => content.grades.find((item) => item.id === gradeId.value) || content.grades[0]);
 const subject = computed(() => grade.value.subjects.find((item) => item.id === subjectId.value) || grade.value.subjects[0]);
+const isGrade4English = computed(() => gradeId.value === "grade4" && subjectId.value === "english");
+const navItems = computed(() => isGrade4English.value
+  ? [["#summer-study", "今天学习"], ["#word-review", "错词复习"], ["#roadmap", "整册路线"], ["#sources", "资料来源"]].map(([href, label]) => ({ href, label }))
+  : standardNavItems
+);
 watch(gradeId, () => {
   subjectId.value = grade.value.defaultSubject || grade.value.subjects[0].id;
 });
