@@ -15,7 +15,9 @@
       <p v-if="currentWord.example" class="word-example">{{ currentWord.example }}</p>
       <button class="speak-button" type="button" @click="speak(currentWord)">朗读单词</button>
       <span v-if="audioStatus" class="audio-status" :class="{ error: audioError }">{{ audioStatus }}</span>
-      <a v-if="audioSource" class="audio-source" :href="audioSource.sourceUrl" target="_blank" rel="noreferrer">在线音源{{ audioSource.licenseName ? ` · ${audioSource.licenseName}` : "" }}</a>
+      <span v-if="audioSources.length" class="audio-source-list">
+        <a v-for="(source, index) in audioSources" :key="source.url" class="audio-source" :href="source.sourceUrl" target="_blank" rel="noreferrer">在线音源{{ audioSources.length > 1 ? ` ${index + 1}` : "" }}{{ source.licenseName ? ` · ${source.licenseName}` : "" }}</a>
+      </span>
       <div class="session-actions split-actions">
         <button class="small-button" type="button" :disabled="wordIndex === 0" @click="previousWord">上一个</button>
         <button v-if="wordIndex < words.length - 1" class="small-button primary" type="button" @click="nextWord">下一个</button>
@@ -47,7 +49,9 @@
       <div class="session-actions split-actions">
         <button class="small-button" type="button" @click="speak(sentence.model)">朗读</button>
         <span v-if="audioStatus" class="audio-status" :class="{ error: audioError }">{{ audioStatus }}</span>
-        <a v-if="audioSource" class="audio-source" :href="audioSource.sourceUrl" target="_blank" rel="noreferrer">在线音源{{ audioSource.licenseName ? ` · ${audioSource.licenseName}` : "" }}</a>
+        <span v-if="audioSources.length" class="audio-source-list">
+          <a v-for="(source, index) in audioSources" :key="source.url" class="audio-source" :href="source.sourceUrl" target="_blank" rel="noreferrer">在线音源{{ audioSources.length > 1 ? ` ${index + 1}` : "" }}{{ source.licenseName ? ` · ${source.licenseName}` : "" }}</a>
+        </span>
         <button v-if="!sentenceResult" class="small-button primary" type="button" @click="checkSentence">检查</button>
         <button v-else class="small-button primary" type="button" @click="finish">完成这一组</button>
       </div>
@@ -65,7 +69,7 @@
 
 <script setup>
 import { computed, onBeforeUnmount, ref, watch } from "vue";
-import { findOnlinePronunciation } from "../services/onlinePronunciation.js";
+import { findOnlinePronunciations } from "../services/onlinePronunciation.js";
 
 const props = defineProps({
   words: { type: Array, required: true },
@@ -84,8 +88,9 @@ const sentenceResult = ref("");
 const missedIds = ref([]);
 const audioStatus = ref("");
 const audioError = ref(false);
-const audioSource = ref(null);
+const audioSources = ref([]);
 let audioPlayer = null;
+let playbackId = 0;
 
 const currentWord = computed(() => props.words[wordIndex.value]);
 const missedWords = computed(() => props.words.filter((item) => missedIds.value.includes(item.id)));
@@ -100,38 +105,58 @@ function normalize(value) {
 async function speak(item) {
   const text = typeof item === "string" ? item : item.english;
   stopAudio();
+  const activePlaybackId = playbackId;
   audioStatus.value = "加载在线音源";
   audioError.value = false;
-  audioSource.value = null;
+  audioSources.value = [];
 
   if (typeof item === "object" && item.audioUrl) {
-    playAudio(item.audioUrl, null, text);
+    playOnlineAudio([{ url: item.audioUrl, sourceUrl: "", licenseName: "" }], text, activePlaybackId);
     return;
   }
 
-  const pronunciation = await findOnlinePronunciation(text);
-  if (pronunciation) {
-    playAudio(pronunciation.url, pronunciation, text);
+  const pronunciations = await findOnlinePronunciations(text);
+  if (activePlaybackId !== playbackId) return;
+  if (pronunciations.length) {
+    playOnlineAudio(pronunciations, text, activePlaybackId);
     return;
   }
 
   speakWithDeviceVoice(text);
 }
 
-function playAudio(url, source, fallbackText) {
-  audioPlayer = new Audio(url);
-  audioSource.value = source;
+function playOnlineAudio(sources, fallbackText, activePlaybackId, index = 0, playedAny = false) {
+  if (activePlaybackId !== playbackId) return;
+  if (index >= sources.length) {
+    audioPlayer = null;
+    if (!playedAny) {
+      audioSources.value = [];
+      speakWithDeviceVoice(fallbackText);
+      return;
+    }
+    audioStatus.value = "";
+    return;
+  }
+
+  const source = sources[index];
+  audioSources.value = sources.filter((item) => item.sourceUrl);
+  audioPlayer = new Audio(source.url);
   let hasFailed = false;
-  const fallBack = () => {
-    if (hasFailed) return;
+  let playedCurrent = false;
+  const nextAudio = () => {
+    if (hasFailed || activePlaybackId !== playbackId) return;
     hasFailed = true;
-    audioSource.value = null;
-    speakWithDeviceVoice(fallbackText);
+    playOnlineAudio(sources, fallbackText, activePlaybackId, index + 1, playedAny || playedCurrent);
   };
-  audioPlayer.onplay = () => { audioError.value = false; audioStatus.value = "正在朗读"; };
-  audioPlayer.onended = () => { audioStatus.value = ""; };
-  audioPlayer.onerror = fallBack;
-  audioPlayer.play().catch(fallBack);
+  audioPlayer.onplay = () => {
+    if (activePlaybackId !== playbackId) return;
+    playedCurrent = true;
+    audioError.value = false;
+    audioStatus.value = sources.length > 1 ? `正在朗读 ${index + 1} / ${sources.length}` : "正在朗读";
+  };
+  audioPlayer.onended = nextAudio;
+  audioPlayer.onerror = nextAudio;
+  audioPlayer.play().catch(nextAudio);
 }
 
 function speakWithDeviceVoice(text) {
@@ -157,6 +182,7 @@ function speakWithDeviceVoice(text) {
 }
 
 function stopAudio() {
+  playbackId += 1;
   if (audioPlayer) {
     audioPlayer.pause();
     audioPlayer = null;
@@ -174,13 +200,27 @@ function resetSession() {
   missedIds.value = [];
   audioStatus.value = "";
   audioError.value = false;
-  audioSource.value = null;
+  audioSources.value = [];
 }
 
 onBeforeUnmount(stopAudio);
 
-function previousWord() { wordIndex.value -= 1; }
-function nextWord() { wordIndex.value += 1; }
+function clearAudioState() {
+  stopAudio();
+  audioStatus.value = "";
+  audioError.value = false;
+  audioSources.value = [];
+}
+
+function previousWord() {
+  clearAudioState();
+  wordIndex.value -= 1;
+}
+
+function nextWord() {
+  clearAudioState();
+  wordIndex.value += 1;
+}
 function startDictation() { wordIndex.value = 0; step.value = "dictation"; }
 
 function rememberMistake() {
