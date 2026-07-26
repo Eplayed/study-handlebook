@@ -42,12 +42,13 @@
     <div v-else-if="step === 'sentence'" class="word-stage sentence-stage">
       <p class="word-count">句型练习</p>
       <h3>{{ sentence.title }}</h3>
+      <p v-if="sentence.prompt" class="sentence-prompt">{{ sentence.prompt }}</p>
       <p class="sentence-chinese">{{ sentence.chinese }}</p>
       <p class="sentence-fill"><span>{{ sentence.before }}</span><input v-model="sentenceAnswer" class="sentence-input" autocomplete="off" autocapitalize="none" spellcheck="false" :disabled="Boolean(sentenceResult)" /><span>{{ sentence.after }}</span></p>
       <p v-if="sentenceResult === 'correct'" class="answer-feedback correct">句型写对了。</p>
-      <p v-else-if="sentenceResult === 'wrong'" class="answer-feedback wrong">正确答案：<strong>{{ sentence.model }}</strong></p>
+      <p v-else-if="sentenceResult === 'wrong'" class="answer-feedback wrong">正确答案：<strong>{{ sentence.response }}</strong></p>
       <div class="session-actions split-actions">
-        <button class="small-button" type="button" @click="speak(sentence.model)">朗读</button>
+        <button class="small-button" type="button" @click="speak(sentenceReadText)">朗读</button>
         <span v-if="audioStatus" class="audio-status" :class="{ error: audioError }">{{ audioStatus }}</span>
         <span v-if="audioSources.length" class="audio-source-list">
           <a v-for="(source, index) in audioSources" :key="source.url" class="audio-source" :href="source.sourceUrl" target="_blank" rel="noreferrer">{{ source.label || "在线音源" }}{{ audioSources.length > 1 ? ` ${index + 1}` : "" }}{{ source.licenseName ? ` · ${source.licenseName}` : "" }}</a>
@@ -95,6 +96,7 @@ let playbackId = 0;
 const currentWord = computed(() => props.words[wordIndex.value]);
 const missedWords = computed(() => props.words.filter((item) => missedIds.value.includes(item.id)));
 const stepLabel = computed(() => ({ learn: "1 认识", dictation: "2 默写", sentence: "3 句型", done: "完成" }[step.value]));
+const sentenceReadText = computed(() => [props.sentence.prompt, props.sentence.response].filter(Boolean).join(" "));
 
 watch(() => props.words, resetSession, { deep: true });
 

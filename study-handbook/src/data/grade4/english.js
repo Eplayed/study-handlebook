@@ -1,6 +1,7 @@
 import { exam, lesson } from "../helpers.js";
 
 const word = (id, english, meaning, example = "", audioUrl = "") => ({ id, english, meaning, example, audioUrl });
+const sentence = (title, prompt, chinese, response, before, answer, after, sourcePage) => ({ title, prompt, chinese, response, before, answer, after, sourcePage });
 
 const units = [
   {
@@ -19,13 +20,13 @@ const units = [
     id: "g4-en-u3",
     title: "Unit 3 Animals and their homes",
     theme: "认识动物和它们的家园，描述动物正在做的事。",
-    lessons: [lesson("g4-en-3", "Unit 3", "Animals and their homes", "能介绍动物、它的家园和正在进行的活动。", ["现在进行时：be + 动词-ing。", "介绍动物时，注意单数动物用 it。"], [exam("g4-en-3-ing", "动词 ing 形式", "描述正在发生的事要用 be + 动词-ing，如 The elephants are walking.")], { coreWords: ["panda", "hometown", "monkey", "elephant", "family", "baby elephant", "polar bear"] })]
+    lessons: [lesson("g4-en-3", "Unit 3", "Animals and their homes", "能介绍动物、它的家园和正在进行的活动。", ["现在进行时：be + 动词-ing。", "介绍动物时，注意单数动物用 it。"], [exam("g4-en-3-ing", "动词 ing 形式", "描述正在发生的事要用 be + 动词-ing，如 The elephant family are playing in the river.")], { coreWords: ["panda", "hometown", "monkey", "elephant", "family", "baby elephant", "polar bear"] })]
   },
   {
     id: "g4-en-u4",
     title: "Unit 4 Our birthday",
     theme: "了解生日活动和生日传统，学会写简单邀请。",
-    lessons: [lesson("g4-en-4", "Unit 4", "Our birthday", "能说生日活动，也能用英语介绍一种传统。", ["表达传统：It's a tradition to + 动词原形。", "邀请卡要写清活动和时间。"], [exam("g4-en-4-tradition", "to 后的动词", "It's a tradition to share a cake. to 后面用动词原形。")], { coreWords: ["invitation", "party", "activity", "share a cake", "letter", "noodles", "egg"] })]
+    lessons: [lesson("g4-en-4", "Unit 4", "Our birthday", "能说生日活动，也能用英语介绍一种传统。", ["表达传统：It's a tradition to + 动词原形。", "邀请卡要写清活动和时间。"], [exam("g4-en-4-tradition", "to 后的动词", "It's a tradition to eat a bowl of noodles on my birthday. to 后面用动词原形。")], { coreWords: ["invitation", "party", "activity", "share a cake", "letter", "noodles", "egg"] })]
   },
   {
     id: "g4-en-u5",
@@ -43,7 +44,7 @@ const units = [
     id: "g4-en-u7",
     title: "Unit 7 My healthy breakfast",
     theme: "谈论健康早餐和一周吃某种食物的频率。",
-    lessons: [lesson("g4-en-7", "Unit 7", "My healthy breakfast", "能介绍自己的早餐，也能问别人一周做几次某事。", ["How often do you ...?", "回答频率：Once/Twice/... times a week。"], [exam("g4-en-7-often", "频率问答", "How often 问“多久一次”；once 是一次，twice 是两次。")], { coreWords: ["breakfast", "bread", "porridge", "juice", "milk", "banana"] })]
+    lessons: [lesson("g4-en-7", "Unit 7", "My healthy breakfast", "能介绍自己的早餐，也能问别人一周做几次某事。", ["How often do you ...?", "回答频率：Once or twice/... times a week。"], [exam("g4-en-7-often", "频率问答", "How often 问“多久一次”；once 是一次，twice 是两次。")], { coreWords: ["breakfast", "bread", "porridge", "juice", "milk", "banana"] })]
   },
   {
     id: "g4-en-u8",
@@ -61,7 +62,7 @@ const units = [
     id: "g4-en-u10",
     title: "Unit 10 Weather",
     theme: "描述天气，学做一段简单的天气预报。",
-    lessons: [lesson("g4-en-10", "Unit 10", "Weather", "能用天气词描述不同城市的天气，并说出温度。", ["问天气：How's the weather ...?", "回答：It's sunny/rainy/cloudy/windy/snowy."], [exam("g4-en-10-weather", "天气句型", "How's the weather in Shanghai? It's rainy. 问句和回答都要完整。")], { coreWords: ["sunny", "rainy", "cloudy", "windy", "snowy", "weather", "weather report", "degree"] })]
+    lessons: [lesson("g4-en-10", "Unit 10", "Weather", "能用天气词描述不同城市的天气，并说出温度。", ["问天气：How's the weather ...?", "回答：It's sunny/rainy/cloudy/windy/snowy."], [exam("g4-en-10-weather", "天气句型", "How's the weather in Shanghai today? It's cold and rainy. 问句和回答都要完整。")], { coreWords: ["sunny", "rainy", "cloudy", "windy", "snowy", "weather", "weather report", "degree"] })]
   }
 ];
 
@@ -167,7 +168,7 @@ const wordsToUseAdditions = {
 };
 
 export const grade4EnglishStudy = {
-  source: "已按《义务教育教科书·英语 四年级上册》目录、Unit 1 第7-14页和第87-89页 Words to use 总表核对。",
+  source: "已核对全册目录和第87-89页 Words to use 总表；每单元句型练习均选自对应 Talking time 或 Find the rule 的教材原句。单词下方例句用于帮助理解，不作为教材原文。",
   units: [
     {
       id: "g4-en-u1",
@@ -183,77 +184,70 @@ export const grade4EnglishStudy = {
         word("g4u1-art-room", "art room", "美术教室", "We draw pictures in the art room."),
         ...wordsToUseAdditions.u1
       ],
-      sentence: {
-        title: "问地点，再说地点",
-        chinese: "小浦在哪里？他在运动场上。",
-        model: "Where's Xiaopu? He is on the sports field.",
-        before: "He is ",
-        answer: "on the sports field",
-        after: "."
-      }
+      sentence: sentence("问地点", "Where's Xiaopu?", "小浦在哪里？在运动场上。", "On the sports field.", "On the ", "sports field", ".", "教材第10-11页")
     },
     {
       id: "g4-en-u2",
       title: "Unit 2 My classmates",
       page: "教材第15-22页",
       words: [word("g4u2-lovely", "lovely", "可爱的", "She is a lovely girl."), word("g4u2-different", "different", "不同的", "We are all different."), word("g4u2-great", "great", "很棒的", "You are a great friend."), word("g4u2-polite", "polite", "有礼貌的", "He is polite to everyone."), word("g4u2-interesting", "interesting", "有趣的", "Her story is interesting."), word("g4u2-helpful", "helpful", "乐于助人的", "My classmate is helpful."), ...wordsToUseAdditions.u2],
-      sentence: { title: "说同学能帮忙做什么", chinese: "她帮助我搬书。", model: "She helps me carry books.", before: "She helps me ", answer: "carry books", after: "." }
+      sentence: sentence("说同学能做什么", "What does Xiaopu always do?", "小浦总是做什么？他总是帮助老师擦黑板。", "Xiaopu always helps teachers clean the blackboard.", "Xiaopu always helps teachers ", "clean the blackboard", ".", "教材第18-19页")
     },
     {
       id: "g4-en-u3",
       title: "Unit 3 Animals and their homes",
       page: "教材第23-30页",
       words: [word("g4u3-panda", "panda", "大熊猫", "The panda is eating bamboo."), word("g4u3-hometown", "hometown", "家乡", "Yunnan is the elephants' hometown."), word("g4u3-monkey", "monkey", "猴子", "The monkey is in the tree."), word("g4u3-elephant", "elephant", "大象", "The elephant has a long nose."), word("g4u3-family", "family", "家庭；家族", "This is an elephant family."), word("g4u3-baby-elephant", "baby elephant", "小象", "The baby elephant is with its mother."), word("g4u3-polar-bear", "polar bear", "北极熊", "The polar bear lives in a cold place."), ...wordsToUseAdditions.u3],
-      sentence: { title: "说动物正在做什么", chinese: "大象正在走路。", model: "The elephants are walking.", before: "The elephants are ", answer: "walking", after: "." }
+      sentence: sentence("说动物正在做什么", "What are the elephant family doing?", "大象一家在做什么？它们正在河里玩耍。", "The elephant family are playing in the river.", "The elephant family are ", "playing in the river", ".", "教材第26-27页")
     },
     {
       id: "g4-en-u4",
       title: "Unit 4 Our birthday",
       page: "教材第31-38页",
       words: [word("g4u4-invitation", "invitation", "邀请；请柬", "This is a birthday invitation."), word("g4u4-party", "party", "聚会", "We have a birthday party."), word("g4u4-activity", "activity", "活动", "The party activity is fun."), word("g4u4-share-cake", "share a cake", "分享蛋糕", "We share a cake together."), word("g4u4-letter", "letter", "信", "I write a letter to Mum."), word("g4u4-noodles", "noodles", "面条", "We eat noodles on birthdays."), word("g4u4-egg", "egg", "鸡蛋", "There is an egg in the bowl."), ...wordsToUseAdditions.u4],
-      sentence: { title: "介绍一种传统", chinese: "生日时吃面是一种传统。", model: "It's a tradition to eat noodles on birthdays.", before: "It's a tradition to ", answer: "eat noodles", after: " on birthdays." }
+      sentence: sentence("介绍一种传统", "What is a tradition at the group birthday party?", "集体生日聚会上有什么传统？读父母的信是一种传统。", "It's a tradition to read parents' letters at our group birthday party.", "It's a tradition to ", "read parents' letters", " at our group birthday party.", "教材第34-35页")
     },
     {
       id: "g4-en-u5",
       title: "Unit 5 Visiting places",
       page: "教材第39-46页",
       words: [word("g4u5-neighbourhood", "neighbourhood", "社区；街区", "My neighbourhood is nice."), word("g4u5-park", "park", "公园", "There is a park near my home."), word("g4u5-bakery", "bakery", "面包店", "The bakery has fresh bread."), word("g4u5-museum", "museum", "博物馆", "We visit the museum."), word("g4u5-cinema", "cinema", "电影院", "The cinema is next to the shop."), word("g4u5-supermarket", "supermarket", "超市", "Mum goes to the supermarket."), word("g4u5-bridge", "bridge", "桥", "There is a bridge over the river."), word("g4u5-shop", "shop", "商店", "The shop is open today."), ...wordsToUseAdditions.u5],
-      sentence: { title: "问某地有没有某物", chinese: "附近有博物馆吗？是的，有。", model: "Is there a museum nearby? Yes, there is.", before: "Yes, there ", answer: "is", after: "." }
+      sentence: sentence("问某地有没有某物", "Is there a museum here?", "这里有博物馆吗？是的，有。", "Yes, there is.", "Yes, there ", "is", ".", "教材第42-43页")
     },
     {
       id: "g4-en-u6",
       title: "Unit 6 It's autumn!",
       page: "教材第47-54页",
       words: [word("g4u6-autumn", "autumn", "秋天", "Autumn is a beautiful season."), word("g4u6-farm", "farm", "农场", "We visit a farm in autumn."), word("g4u6-fall", "fall", "落下", "Leaves fall in autumn."), word("g4u6-leaf", "leaf", "叶子", "This leaf is yellow."), word("g4u6-fruit", "fruit", "水果", "The fruit is sweet."), word("g4u6-fly-south", "fly south", "飞往南方", "Some birds fly south."), word("g4u6-apple", "apple", "苹果", "The apple is red."), ...wordsToUseAdditions.u6],
-      sentence: { title: "用 How 表达感叹", chinese: "这些叶子多么漂亮啊！", model: "How beautiful the leaves are!", before: "How ", answer: "beautiful", after: " the leaves are!" }
+      sentence: sentence("用 How 表达感叹", "Look at the leaves.", "看这些叶子。它们多么漂亮啊！", "Look, how beautiful the leaves are!", "Look, how ", "beautiful", " the leaves are!", "教材第50-51页")
     },
     {
       id: "g4-en-u7",
       title: "Unit 7 My healthy breakfast",
       page: "教材第55-62页",
       words: [word("g4u7-breakfast", "breakfast", "早餐", "Breakfast is important."), word("g4u7-bread", "bread", "面包", "I have bread for breakfast."), word("g4u7-porridge", "porridge", "粥", "Dad likes porridge."), word("g4u7-juice", "juice", "果汁", "I drink some juice."), word("g4u7-milk", "milk", "牛奶", "Milk is good for us."), word("g4u7-banana", "banana", "香蕉", "The banana is yellow."), ...wordsToUseAdditions.u7],
-      sentence: { title: "问一周做几次", chinese: "你一周喝几次牛奶？两次。", model: "How often do you drink milk? Twice a week.", before: "Twice ", answer: "a week", after: "." }
+      sentence: sentence("问一周做几次", "How often do you have sandwiches?", "你一周吃几次三明治？一周两到三次。", "Two or three times a week.", "Two or three times ", "a week", ".", "教材第58-59页")
     },
     {
       id: "g4-en-u8",
       title: "Unit 8 Be honest",
       page: "教材第63-70页",
       words: [word("g4u8-keep-word", "keep one's word", "守信用", "We should keep our word."), word("g4u8-give-back", "give ... back", "归还……", "Please give the book back."), word("g4u8-trust", "trust each other", "彼此信任", "Friends trust each other."), word("g4u8-honest", "honest", "诚实的", "An honest child tells the truth."), word("g4u8-honesty", "honesty", "诚实", "Honesty is important."), word("g4u8-tell-truth", "tell the truth", "说实话", "You should tell the truth."), word("g4u8-never-lie", "never tell a lie", "从不说谎", "We should never tell a lie."), ...wordsToUseAdditions.u8],
-      sentence: { title: "用 should 给建议", chinese: "你应该说实话。", model: "You should tell the truth.", before: "You should ", answer: "tell the truth", after: "." }
+      sentence: sentence("用 should 给建议", "What should I do?", "我应该怎么办？无论如何，你应该告诉她这件事。", "You should tell her about it, anyway.", "You should ", "tell her about it, anyway", ".", "教材第66-67页")
     },
     {
       id: "g4-en-u9",
       title: "Unit 9 What time is it?",
       page: "教材第71-78页",
       words: [word("g4u9-time", "time", "时间", "What time is it?"), word("g4u9-hour-hand", "hour hand", "时针", "The hour hand is short."), word("g4u9-minute-hand", "minute hand", "分针", "The minute hand is long."), word("g4u9-seven", "seven o'clock", "七点整", "It is seven o'clock."), word("g4u9-half-eleven", "half past eleven", "十一点半", "It is half past eleven."), word("g4u9-ten-four", "ten to four", "差十分四点", "It is ten to four."), ...wordsToUseAdditions.u9],
-      sentence: { title: "说整点时间", chinese: "现在几点？七点整。", model: "What time is it? It's seven o'clock.", before: "It's ", answer: "seven o'clock", after: "." }
+      sentence: sentence("说整点时间", "What time is it?", "现在几点？七点整。", "It's seven o'clock.", "It's ", "seven o'clock", ".", "教材第72-73页")
     },
     {
       id: "g4-en-u10",
       title: "Unit 10 Weather",
       page: "教材第79-86页",
       words: [word("g4u10-sunny", "sunny", "晴朗的", "It is sunny today."), word("g4u10-rainy", "rainy", "下雨的", "It is rainy in Shanghai."), word("g4u10-cloudy", "cloudy", "多云的", "It is cloudy this morning."), word("g4u10-windy", "windy", "有风的", "It is windy outside."), word("g4u10-snowy", "snowy", "下雪的", "It is snowy in winter."), word("g4u10-weather", "weather", "天气", "The weather is nice."), word("g4u10-report", "weather report", "天气预报", "Let's watch the weather report."), word("g4u10-degree", "degree", "度", "It is twenty degrees."), ...wordsToUseAdditions.u10],
-      sentence: { title: "问天气", chinese: "上海天气怎么样？下雨。", model: "How's the weather in Shanghai? It's rainy.", before: "It's ", answer: "rainy", after: "." }
+      sentence: sentence("问天气", "How's the weather in Shanghai today?", "上海今天天气怎么样？又冷又有雨。", "It's cold and rainy.", "It's ", "cold and rainy", ".", "教材第82-83页")
     }
   ]
 };
