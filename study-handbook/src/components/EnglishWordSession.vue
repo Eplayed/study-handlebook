@@ -69,8 +69,8 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from "vue";
-import { findOnlinePronunciations } from "../services/onlinePronunciation.js";
+import { computed, ref, watch } from "vue";
+import { useEnglishPronunciation } from "../composables/useEnglishPronunciation.js";
 
 const props = defineProps({
   words: { type: Array, required: true },
@@ -87,11 +87,7 @@ const answerResult = ref("");
 const sentenceAnswer = ref("");
 const sentenceResult = ref("");
 const missedIds = ref([]);
-const audioStatus = ref("");
-const audioError = ref(false);
-const audioSources = ref([]);
-let audioPlayer = null;
-let playbackId = 0;
+const { audioStatus, audioError, audioSources, clearPronunciation, speak } = useEnglishPronunciation();
 
 const currentWord = computed(() => props.words[wordIndex.value]);
 const missedWords = computed(() => props.words.filter((item) => missedIds.value.includes(item.id)));
@@ -104,94 +100,6 @@ function normalize(value) {
   return value.toLowerCase().trim().replace(/[’‘]/g, "'").replace(/[-\s]+/g, " ");
 }
 
-async function speak(item) {
-  const text = typeof item === "string" ? item : item.english;
-  stopAudio();
-  const activePlaybackId = playbackId;
-  audioStatus.value = "加载在线音源";
-  audioError.value = false;
-  audioSources.value = [];
-
-  if (typeof item === "object" && item.audioUrl) {
-    playOnlineAudio([{ url: item.audioUrl, sourceUrl: "", licenseName: "" }], text, activePlaybackId);
-    return;
-  }
-
-  const pronunciations = findOnlinePronunciations(text);
-  if (activePlaybackId !== playbackId) return;
-  if (pronunciations.length) {
-    playOnlineAudio(pronunciations, text, activePlaybackId);
-    return;
-  }
-
-  speakWithDeviceVoice(text);
-}
-
-function playOnlineAudio(sources, fallbackText, activePlaybackId, index = 0, playedAny = false) {
-  if (activePlaybackId !== playbackId) return;
-  if (index >= sources.length) {
-    audioPlayer = null;
-    if (!playedAny) {
-      audioSources.value = [];
-      speakWithDeviceVoice(fallbackText);
-      return;
-    }
-    audioStatus.value = "";
-    return;
-  }
-
-  const source = sources[index];
-  audioSources.value = sources.filter((item) => item.sourceUrl);
-  audioPlayer = new Audio(source.url);
-  let hasFailed = false;
-  let playedCurrent = false;
-  const nextAudio = () => {
-    if (hasFailed || activePlaybackId !== playbackId) return;
-    hasFailed = true;
-    playOnlineAudio(sources, fallbackText, activePlaybackId, index + 1, playedAny || playedCurrent);
-  };
-  audioPlayer.onplay = () => {
-    if (activePlaybackId !== playbackId) return;
-    playedCurrent = true;
-    audioError.value = false;
-    audioStatus.value = sources.length > 1 ? `正在朗读 ${index + 1} / ${sources.length}` : "正在朗读";
-  };
-  audioPlayer.onended = nextAudio;
-  audioPlayer.onerror = nextAudio;
-  audioPlayer.play().catch(nextAudio);
-}
-
-function speakWithDeviceVoice(text) {
-  if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
-    audioError.value = true;
-    audioStatus.value = "此设备不支持朗读";
-    return;
-  }
-
-  const synth = window.speechSynthesis;
-  const utterance = new SpeechSynthesisUtterance(text);
-  const voice = synth.getVoices().find((item) => item.lang === "en-US") || synth.getVoices().find((item) => item.lang.startsWith("en"));
-  if (voice) utterance.voice = voice;
-  utterance.lang = voice?.lang || "en-US";
-  utterance.rate = 0.8;
-  utterance.onstart = () => { audioError.value = false; audioStatus.value = "正在朗读"; };
-  utterance.onend = () => { audioStatus.value = ""; };
-  utterance.onerror = () => { audioError.value = true; audioStatus.value = "朗读没有播放，请检查设备音量"; };
-
-  synth.cancel();
-  synth.resume();
-  window.setTimeout(() => synth.speak(utterance), 20);
-}
-
-function stopAudio() {
-  playbackId += 1;
-  if (audioPlayer) {
-    audioPlayer.pause();
-    audioPlayer = null;
-  }
-  window.speechSynthesis?.cancel();
-}
-
 function resetSession() {
   step.value = "learn";
   wordIndex.value = 0;
@@ -200,18 +108,11 @@ function resetSession() {
   sentenceAnswer.value = "";
   sentenceResult.value = "";
   missedIds.value = [];
-  audioStatus.value = "";
-  audioError.value = false;
-  audioSources.value = [];
+  clearPronunciation();
 }
 
-onBeforeUnmount(stopAudio);
-
 function clearAudioState() {
-  stopAudio();
-  audioStatus.value = "";
-  audioError.value = false;
-  audioSources.value = [];
+  clearPronunciation();
 }
 
 function previousWord() {

@@ -4,20 +4,28 @@ function normalizeTerm(term) {
   return term.trim().replace(/\s+/g, " ");
 }
 
-export function findOnlinePronunciations(term) {
+export function findOnlinePronunciations(term, { sentence = false } = {}) {
   const text = normalizeTerm(term);
   if (!text) return [];
 
-  if (pronunciationCache.has(text)) return pronunciationCache.get(text);
+  const cacheKey = `${sentence ? "sentence" : "word"}:${text}`;
+  if (pronunciationCache.has(cacheKey)) return pronunciationCache.get(cacheKey);
 
-  // A single regional request avoids the previous dictionary lookup and word-by-word queue.
-  const pronunciations = [{
-    url: `https://dict.youdao.com/dictvoice?type=2&audio=${encodeURIComponent(text)}`,
-    sourceUrl: `https://www.youdao.com/result?word=${encodeURIComponent(text)}&lang=en`,
-    label: "国内快速音源",
-    licenseName: ""
-  }];
+  // Word and sentence endpoints are split because the dictionary endpoint rejects long sentences.
+  const pronunciations = sentence
+    ? [{
+      url: `https://fanyi.baidu.com/gettts?lan=en&spd=3&source=web&text=${encodeURIComponent(text)}`,
+      sourceUrl: "https://fanyi.baidu.com/",
+      label: "国内句型音源",
+      licenseName: ""
+    }]
+    : [{
+      url: `https://dict.youdao.com/dictvoice?type=2&audio=${encodeURIComponent(text)}`,
+      sourceUrl: `https://www.youdao.com/result?word=${encodeURIComponent(text)}&lang=en`,
+      label: "国内快速音源",
+      licenseName: ""
+    }];
 
-  pronunciationCache.set(text, pronunciations);
+  pronunciationCache.set(cacheKey, pronunciations);
   return pronunciations;
 }
