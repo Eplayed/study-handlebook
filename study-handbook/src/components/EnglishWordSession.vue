@@ -16,7 +16,7 @@
       <button class="speak-button" type="button" @click="speak(currentWord)">朗读单词</button>
       <span v-if="audioStatus" class="audio-status" :class="{ error: audioError }">{{ audioStatus }}</span>
       <span v-if="audioSources.length" class="audio-source-list">
-        <a v-for="(source, index) in audioSources" :key="source.url" class="audio-source" :href="source.sourceUrl" target="_blank" rel="noreferrer">在线音源{{ audioSources.length > 1 ? ` ${index + 1}` : "" }}{{ source.licenseName ? ` · ${source.licenseName}` : "" }}</a>
+        <a v-for="(source, index) in audioSources" :key="source.url" class="audio-source" :href="source.sourceUrl" target="_blank" rel="noreferrer">{{ source.label || "在线音源" }}{{ audioSources.length > 1 ? ` ${index + 1}` : "" }}{{ source.licenseName ? ` · ${source.licenseName}` : "" }}</a>
       </span>
       <div class="session-actions split-actions">
         <button class="small-button" type="button" :disabled="wordIndex === 0" @click="previousWord">上一个</button>
@@ -50,7 +50,7 @@
         <button class="small-button" type="button" @click="speak(sentence.model)">朗读</button>
         <span v-if="audioStatus" class="audio-status" :class="{ error: audioError }">{{ audioStatus }}</span>
         <span v-if="audioSources.length" class="audio-source-list">
-          <a v-for="(source, index) in audioSources" :key="source.url" class="audio-source" :href="source.sourceUrl" target="_blank" rel="noreferrer">在线音源{{ audioSources.length > 1 ? ` ${index + 1}` : "" }}{{ source.licenseName ? ` · ${source.licenseName}` : "" }}</a>
+          <a v-for="(source, index) in audioSources" :key="source.url" class="audio-source" :href="source.sourceUrl" target="_blank" rel="noreferrer">{{ source.label || "在线音源" }}{{ audioSources.length > 1 ? ` ${index + 1}` : "" }}{{ source.licenseName ? ` · ${source.licenseName}` : "" }}</a>
         </span>
         <button v-if="!sentenceResult" class="small-button primary" type="button" @click="checkSentence">检查</button>
         <button v-else class="small-button primary" type="button" @click="finish">完成这一组</button>
@@ -115,7 +115,7 @@ async function speak(item) {
     return;
   }
 
-  const pronunciations = await findOnlinePronunciations(text);
+  const pronunciations = findOnlinePronunciations(text);
   if (activePlaybackId !== playbackId) return;
   if (pronunciations.length) {
     playOnlineAudio(pronunciations, text, activePlaybackId);
