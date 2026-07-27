@@ -119,7 +119,9 @@ const wordsToUseAdditions = {
     word("g4u6-boy", "boy", "男孩"),
     word("g4u6-girl", "girl", "女孩"),
     word("g4u6-piece", "piece", "片；块"),
-    word("g4u6-pine-tree", "pine tree", "松树")
+    word("g4u6-pine-tree", "pine tree", "松树"),
+    word("g4u6-worker", "worker", "工作者"),
+    word("g4u6-land", "land", "陆地；大地")
   ],
   u7: [
     word("g4u7-menu", "menu", "菜单"),
@@ -143,9 +145,7 @@ const wordsToUseAdditions = {
     word("g4u8-empty", "empty", "空的"),
     word("g4u8-pot", "pot", "罐；壶；锅"),
     word("g4u8-seed", "seed", "种子"),
-    word("g4u8-month", "month", "月份"),
-    word("g4u8-moon", "the moon", "月球"),
-    word("g4u8-night", "night", "夜；夜晚")
+    word("g4u8-month", "month", "月份")
   ],
   u9: [
     word("g4u9-evening", "evening", "晚上；傍晚"),
@@ -153,7 +153,9 @@ const wordsToUseAdditions = {
     word("g4u9-line", "line", "线条"),
     word("g4u9-circle", "circle", "圆形"),
     word("g4u9-explain", "explain", "解释；说明"),
-    word("g4u9-earth", "the earth", "地球")
+    word("g4u9-earth", "the earth", "地球"),
+    word("g4u9-moon", "the moon", "月球"),
+    word("g4u9-night", "night", "夜；夜晚")
   ],
   u10: [
     word("g4u10-father", "father", "父亲；爸爸"),
@@ -168,7 +170,7 @@ const wordsToUseAdditions = {
 };
 
 export const grade4EnglishStudy = {
-  source: "已核对全册目录和第87-89页 Words to use 总表；每单元句型练习均选自对应 Talking time 或 Find the rule 的教材原句。单词下方例句用于帮助理解，不作为教材原文。",
+  source: "已逐单元核对教材 Topic words（第8、16…80页）和 Words to use 总表（第87-89页）；每组句型练习的英文提示、答案均选自对应教材页。单词下方例句用于帮助理解，不作为教材原文。",
   units: [
     {
       id: "g4-en-u1",
@@ -191,21 +193,21 @@ export const grade4EnglishStudy = {
       title: "Unit 2 My classmates",
       page: "教材第15-22页",
       words: [word("g4u2-lovely", "lovely", "可爱的", "She is a lovely girl."), word("g4u2-different", "different", "不同的", "We are all different."), word("g4u2-great", "great", "很棒的", "You are a great friend."), word("g4u2-polite", "polite", "有礼貌的", "He is polite to everyone."), word("g4u2-interesting", "interesting", "有趣的", "Her story is interesting."), word("g4u2-helpful", "helpful", "乐于助人的", "My classmate is helpful."), ...wordsToUseAdditions.u2],
-      sentence: sentence("说同学能做什么", "What does Xiaopu always do?", "小浦总是做什么？他总是帮助老师擦黑板。", "Xiaopu always helps teachers clean the blackboard.", "Xiaopu always helps teachers ", "clean the blackboard", ".", "教材第18-19页")
+      sentence: sentence("说同学能做什么", "Who is helpful in Shenshen’s class?", "谁是珊珊班里乐于助人的同学？小浦总是帮老师擦黑板。", "Xiaopu always helps teachers clean the blackboard.", "Xiaopu always helps teachers ", "clean the blackboard", ".", "教材第18-19页")
     },
     {
       id: "g4-en-u3",
       title: "Unit 3 Animals and their homes",
       page: "教材第23-30页",
       words: [word("g4u3-panda", "panda", "大熊猫", "The panda is eating bamboo."), word("g4u3-hometown", "hometown", "家乡", "Yunnan is the elephants' hometown."), word("g4u3-monkey", "monkey", "猴子", "The monkey is in the tree."), word("g4u3-elephant", "elephant", "大象", "The elephant has a long nose."), word("g4u3-family", "family", "家庭；家族", "This is an elephant family."), word("g4u3-baby-elephant", "baby elephant", "小象", "The baby elephant is with its mother."), word("g4u3-polar-bear", "polar bear", "北极熊", "The polar bear lives in a cold place."), ...wordsToUseAdditions.u3],
-      sentence: sentence("说动物正在做什么", "What are the elephant family doing?", "大象一家在做什么？它们正在河里玩耍。", "The elephant family are playing in the river.", "The elephant family are ", "playing in the river", ".", "教材第26-27页")
+      sentence: sentence("说动物正在做什么", "Look, what are they doing?", "看，它们在做什么？大象一家正在河里玩耍。", "The elephant family are playing in the river.", "The elephant family are ", "playing in the river", ".", "教材第26-27页")
     },
     {
       id: "g4-en-u4",
       title: "Unit 4 Our birthday",
       page: "教材第31-38页",
       words: [word("g4u4-invitation", "invitation", "邀请；请柬", "This is a birthday invitation."), word("g4u4-party", "party", "聚会", "We have a birthday party."), word("g4u4-activity", "activity", "活动", "The party activity is fun."), word("g4u4-share-cake", "share a cake", "分享蛋糕", "We share a cake together."), word("g4u4-letter", "letter", "信", "I write a letter to Mum."), word("g4u4-noodles", "noodles", "面条", "We eat noodles on birthdays."), word("g4u4-egg", "egg", "鸡蛋", "There is an egg in the bowl."), ...wordsToUseAdditions.u4],
-      sentence: sentence("介绍一种传统", "What is a tradition at the group birthday party?", "集体生日聚会上有什么传统？读父母的信是一种传统。", "It's a tradition to read parents' letters at our group birthday party.", "It's a tradition to ", "read parents' letters", " at our group birthday party.", "教材第34-35页")
+      sentence: sentence("介绍一种传统", "What will they say?", "他们会说什么？在集体生日聚会上读父母的信是一种传统。", "It's a tradition to read parents' letters at our group birthday party.", "It's a tradition to ", "read parents' letters", " at our group birthday party.", "教材第34-35页")
     },
     {
       id: "g4-en-u5",
@@ -219,7 +221,7 @@ export const grade4EnglishStudy = {
       title: "Unit 6 It's autumn!",
       page: "教材第47-54页",
       words: [word("g4u6-autumn", "autumn", "秋天", "Autumn is a beautiful season."), word("g4u6-farm", "farm", "农场", "We visit a farm in autumn."), word("g4u6-fall", "fall", "落下", "Leaves fall in autumn."), word("g4u6-leaf", "leaf", "叶子", "This leaf is yellow."), word("g4u6-fruit", "fruit", "水果", "The fruit is sweet."), word("g4u6-fly-south", "fly south", "飞往南方", "Some birds fly south."), word("g4u6-apple", "apple", "苹果", "The apple is red."), ...wordsToUseAdditions.u6],
-      sentence: sentence("用 How 表达感叹", "Look at the leaves.", "看这些叶子。它们多么漂亮啊！", "Look, how beautiful the leaves are!", "Look, how ", "beautiful", " the leaves are!", "教材第50-51页")
+      sentence: sentence("用 How 表达感叹", "What did Shenshen and her classmates find about autumn?", "珊珊和同学们发现秋天有什么？看，这些叶子多么漂亮啊！", "Look, how beautiful the leaves are!", "Look, how ", "beautiful", " the leaves are!", "教材第50-51页")
     },
     {
       id: "g4-en-u7",
@@ -233,7 +235,7 @@ export const grade4EnglishStudy = {
       title: "Unit 8 Be honest",
       page: "教材第63-70页",
       words: [word("g4u8-keep-word", "keep one's word", "守信用", "We should keep our word."), word("g4u8-give-back", "give ... back", "归还……", "Please give the book back."), word("g4u8-trust", "trust each other", "彼此信任", "Friends trust each other."), word("g4u8-honest", "honest", "诚实的", "An honest child tells the truth."), word("g4u8-honesty", "honesty", "诚实", "Honesty is important."), word("g4u8-tell-truth", "tell the truth", "说实话", "You should tell the truth."), word("g4u8-never-lie", "never tell a lie", "从不说谎", "We should never tell a lie."), ...wordsToUseAdditions.u8],
-      sentence: sentence("用 should 给建议", "What should I do?", "我应该怎么办？无论如何，你应该告诉她这件事。", "You should tell her about it, anyway.", "You should ", "tell her about it, anyway", ".", "教材第66-67页")
+      sentence: sentence("用 should 给建议", "What happened?", "发生什么事了？无论如何，你应该告诉她这件事。", "You should tell her about it, anyway.", "You should ", "tell her about it, anyway", ".", "教材第66-67页")
     },
     {
       id: "g4-en-u9",

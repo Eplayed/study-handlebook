@@ -59,7 +59,7 @@
 - `src/data/grade3/chinese.js`：三年级语文。
 - `src/data/grade3/math.js`：三年级数学。
 - `src/data/grade3/english.js`：三年级英语。
-- `src/data/grade4/english.js`：四年级英语上册目录和暑假词汇学习数据。
+- `src/data/grade4/english.js`：四年级英语上册目录和暑假词汇学习数据。词汇已按教材 Topic words 与 Words to use 核对；句型的英文提示和答案均来自对应教材页。
 
 四年级内容增加时，新增 `src/data/grade4/`，保持同样结构。
 
